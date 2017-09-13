@@ -1,0 +1,57 @@
+{
+  "name": "axios-case-converter",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "lint-src": "eslint src",
+    "lint-examples": "eslint examples",
+    "test": "npm run lint-src && cross-env BABEL_ENV=cjs babel-node test/index.js | tap-spec",
+    "test-without-lint": "cross-env BABEL_ENV=cjs babel-node test/index.js | tap-spec",
+    "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
+    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
+    "build": "run-p build:*",
+    "prepublish": "in-publish && (git diff --no-ext-diff --quiet --exit-code src .gitignore package.json README.md LICENSE || (echo \"Please commit changes!\" && false)) && npm test && npm run build || not-in-publish"
+  },
+  "description": "Axios transformer/interceptor that converts snake_case/camelCase",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mpyw/axios-interceptor-change-case.git"
+  },
+  "keywords": [
+    "axios",
+    "interceptor",
+    "snake",
+    "camel",
+    "case",
+    "convert"
+  ],
+  "author": "mpyw <ryosuke_i_628@yahoo.co.jp>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mpyw/axios-interceptor-change-case/issues"
+  },
+  "homepage": "https://github.com/mpyw/axios-interceptor-change-case#readme",
+  "devDependencies": {
+    "axios": "^0.16.2",
+    "axios-mock-adapter": "^1.9.0",
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.0",
+    "cross-env": "^5.0.5",
+    "eslint": "^4.6.1",
+    "eslint-plugin-react": "^7.3.0",
+    "in-publish": "^2.0.0",
+    "npm-run-all": "^4.1.1",
+    "redux": "^3.7.2",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.8.0",
+    "utils-copy-error": "^1.0.1"
+  },
+  "dependencies": {
+    "change-case": "^3.0.1",
+    "is-plain-object": "^2.0.4"
+  }
+}
