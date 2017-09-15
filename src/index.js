@@ -9,9 +9,9 @@ const transform = (data, fn, overwrite = false) => {
     return data
   }
   const store = overwrite ? data : new data.constructor
-  for (const [key, value] of Object.entries(data)) {
+  for (const [key, value] of data.entries ? data.entries(data) : Object.entries(data)) {
     if (store.append) {
-      store.append(fn(key), transform(value, fn))
+      store.append(key.replace(/[^[\]]+/g, k => fn(k)), transform(value, fn))
     } else {
       store[fn(key)] = transform(value, fn)
     }
