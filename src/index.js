@@ -8,6 +8,9 @@ const transform = (data, fn, overwrite = false) => {
   if (!Array.isArray(data) && !isPlainObject(data) && !isFormData(data) && !isURLSearchParams(data)) {
     return data
   }
+  if (isFormData(data) && !data.entries) {
+    throw new Error('You must use polyfill of FormData.prototype.entries(): https://github.com/jimmywarting/FormData')
+  }
   const store = overwrite ? data : new data.constructor
   for (const [key, value] of data.entries ? data.entries(data) : Object.entries(data)) {
     if (store.append) {
