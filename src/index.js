@@ -1,52 +1,31 @@
-import isPlainObject from 'is-plain-object'
-import { camel, snake, header } from 'change-case'
+import { header as ccHeader } from 'change-case'
+import { snake, camel, header } from './transform'
 
-const isURLSearchParams = value => typeof URLSearchParams !== 'undefined' && value instanceof URLSearchParams
-const isFormData = value => typeof FormData !== 'undefined' && value instanceof FormData
-
-const transform = (data, fn, overwrite = false) => {
-  if (!Array.isArray(data) && !isPlainObject(data) && !isFormData(data) && !isURLSearchParams(data)) {
-    return data
-  }
-  if (isFormData(data) && !data.entries) {
-    throw new Error('You must use polyfill of FormData.prototype.entries(): https://github.com/jimmywarting/FormData')
-  }
-  const store = overwrite ? data : new data.constructor
-  for (const [key, value] of data.entries ? data.entries(data) : Object.entries(data)) {
-    if (store.append) {
-      store.append(key.replace(/[^[\]]+/g, k => fn(k)), transform(value, fn))
-    } else {
-      store[fn(key)] = transform(value, fn)
-    }
-  }
-  return store
-}
-
-export const snakizeRequest = (data, headers) => {
-  for (const [key, value] of Object.entries(headers)) {
-    const newValue = transform(value, header, true)
-    if (!['common', 'delete', 'get', 'head', 'post', 'put', 'patch'].includes(key)) {
-      delete headers[key]
-      headers[header(key)] = newValue
-    }
-  }
-  return transform(data, snake)
-}
-export const camelizeResponse = (data, headers) => {
-  transform(headers, camel, true)
-  return transform(data, camel)
-}
-export const snakizeRequestParams = config => {
+export const snakeParams = config => {
   if (config.params) {
-    config.params = transform(config.params, snake)
+    config.params = snake(config.params)
   }
   return config
 }
+export const snakeRequest = (data, headers) => {
+  for (const [key, value] of Object.entries(headers)) {
+    header(value, true)
+    if (!['common', 'delete', 'get', 'head', 'post', 'put', 'patch'].includes(key)) {
+      delete headers[key]
+      headers[ccHeader(key)] = value
+    }
+  }
+  return snake(data)
+}
+export const camelResponse = (data, headers) => {
+  camel(headers, true)
+  return camel(data)
+}
 
 const applyConverters = axios => {
-  axios.defaults.transformRequest.unshift(snakizeRequest)
-  axios.defaults.transformResponse.push(camelizeResponse)
-  axios.interceptors.request.use(snakizeRequestParams)
+  axios.defaults.transformRequest.unshift(snakeRequest)
+  axios.defaults.transformResponse.push(camelResponse)
+  axios.interceptors.request.use(snakeParams)
   return axios
 }
 
