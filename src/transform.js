@@ -10,9 +10,18 @@ const transform = (data, fn, overwrite = false) => {
   if (!Array.isArray(data) && !isPlainObject(data) && !isFormData(data) && !isURLSearchParams(data)) {
     return data
   }
+
+  /* eslint-disable no-console */
   if (isFormData(data) && !data.entries) {
-    throw new Error('You must use polyfill of FormData.prototype.entries(): https://github.com/jimmywarting/FormData')
+    if (navigator.product === 'ReactNative') {
+      console.warn('Be careful that FormData cannot be transformed on React Native. If you intentionally implemented, ignore this kind of warning: https://facebook.github.io/react-native/docs/debugging.html')
+    } else {
+      console.warn('You must use polyfill of FormData.prototype.entries() on Internet Explorer or Safari: https://github.com/jimmywarting/FormData')
+    }
+    return data
   }
+  /* eslint-enable no-console */
+
   const store = overwrite ? data : new data.constructor
   for (const [key, value] of data.entries ? data.entries(data) : Object.entries(data)) {
     if (store.append) {
