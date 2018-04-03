@@ -41,3 +41,14 @@ import axios from 'axios'
 If you use `FormData` on **Internet Explorer** or **Safari**, you need polyfill of `FormData.prototype.entries()`.
 
 - [jimmywarting/FormData: HTML5 `FormData` polyfill for Browsers.](https://github.com/jimmywarting/FormData)
+
+If you use `FormData` on **React Native**, please ignore the following warnings after confirming that polyfill is **impossible**.
+
+```js
+// RN >= 0.52
+import { YellowBox } from 'react-native'
+YellowBox.ignoreWarnings(['Be careful that FormData cannot be transformed on React Native.'])
+
+// RN < 0.52
+console.ignoredYellowBox = ['Be careful that FormData cannot be transformed on React Native.']
+```
