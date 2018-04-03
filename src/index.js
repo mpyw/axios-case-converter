@@ -23,8 +23,8 @@ export const camelResponse = (data, headers) => {
 }
 
 const applyConverters = axios => {
-  axios.defaults.transformRequest.unshift(snakeRequest)
-  axios.defaults.transformResponse.push(camelResponse)
+  axios.defaults.transformRequest = [snakeRequest, ...axios.defaults.transformRequest]
+  axios.defaults.transformResponse = [...axios.defaults.transformResponse, camelResponse]
   axios.interceptors.request.use(snakeParams)
   return axios
 }
