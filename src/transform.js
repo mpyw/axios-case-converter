@@ -23,7 +23,7 @@ const transform = (data, fn, overwrite = false) => {
   /* eslint-enable no-console */
 
   const store = overwrite ? data : new data.constructor
-  for (const [key, value] of data.entries ? data.entries(data) : Object.entries(data)) {
+  for (const [key, value] of typeof data.entries === 'function' ? data.entries(data) : Object.entries(data)) {
     if (store.append) {
       store.append(key.replace(/[^[\]]+/g, k => fn(k)), transform(value, fn))
     } else {

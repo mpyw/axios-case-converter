@@ -12,6 +12,9 @@ const data = {
     'foo',
     { foo_bar_baz456: 'fooBarBaz456' },
   ],
+  entries: {
+    foo_bar_baz123: 'fooBarBaz123',
+  },
   empty: null,
 }
 
@@ -40,6 +43,9 @@ test('it should be converted on success', assert => {
         'foo',
         { fooBarBaz456: 'fooBarBaz456' },
       ],
+      entries: {
+        fooBarBaz123: 'fooBarBaz123',
+      },
       empty: null,
     },
     {
@@ -61,6 +67,9 @@ test('it should be converted on success', assert => {
         'foo',
         { fooBarBaz456: 'fooBarBaz456' },
       ],
+      entries: {
+        fooBarBaz123: 'fooBarBaz123',
+      },
       empty: null,
     })
     assert.equal(response.headers.contentType, 'application/json')
@@ -88,6 +97,9 @@ test('it should be converted on failure', assert => {
         'foo',
         { fooBarBaz456: 'fooBarBaz456' },
       ],
+      entries: {
+        fooBarBaz123: 'fooBarBaz123',
+      },
       empty: null,
     },
     {
@@ -109,6 +121,9 @@ test('it should be converted on failure', assert => {
         'foo',
         { fooBarBaz456: 'fooBarBaz456' },
       ],
+      entries: {
+        fooBarBaz123: 'fooBarBaz123',
+      },
       empty: null,
     })
     assert.equal(error.response.headers.contentType, 'application/json')
