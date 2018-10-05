@@ -1,10 +1,9 @@
-import isPlainObject from 'is-plain-object'
 import {
   camel as ccCamel,
   snake as ccSnake,
   header as ccHeader,
 } from 'change-case'
-import { isURLSearchParams, isFormData } from './util'
+import { isPlainObject, isURLSearchParams, isFormData } from './util'
 
 const transform = (data, fn, overwrite = false) => {
   if (!Array.isArray(data) && !isPlainObject(data) && !isFormData(data) && !isURLSearchParams(data)) {
@@ -22,11 +21,12 @@ const transform = (data, fn, overwrite = false) => {
   }
   /* eslint-enable no-console */
 
-  const store = overwrite ? data : new data.constructor
-  for (const [key, value] of typeof data.entries === 'function' ? data.entries(data) : Object.entries(data)) {
-    if (store.append) {
-      store.append(key.replace(/[^[\]]+/g, k => fn(k)), transform(value, fn))
-    } else {
+  const prototype = Object.getPrototypeOf(data)
+  const store = overwrite ? data : prototype ? new prototype.constructor : Object.create(null)
+  for (const [key, value] of prototype && prototype.entries ? prototype.entries.call(data) : Object.entries(data)) {
+    if (prototype && prototype.append) {
+      prototype.append.call(store, key.replace(/[^[\]]+/g, k => fn(k)), transform(value, fn))
+    } else if (key !== '__proto__') {
       store[fn(key)] = transform(value, fn)
     }
   }

@@ -3,7 +3,7 @@ import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import applyConverters from '../src'
 
-const data = {
+const snakeData = {
   user_id: 1,
   something_object: {
     foo_bar_baz123: 'fooBarBaz123',
@@ -14,6 +14,38 @@ const data = {
   ],
   entries: {
     foo_bar_baz123: 'fooBarBaz123',
+  },
+  append: {
+    foo_bar_baz123: 'fooBarBaz123',
+  },
+  constructor: {
+    foo_bar_baz123: 'fooBarBaz123',
+  },
+  prototype: {
+    foo_bar_baz123: 'fooBarBaz123',
+  },
+  empty: null,
+}
+const camelData = {
+  userId: 1,
+  somethingObject: {
+    fooBarBaz123: 'fooBarBaz123',
+  },
+  somethingArray: [
+    'foo',
+    { fooBarBaz456: 'fooBarBaz456' },
+  ],
+  entries: {
+    fooBarBaz123: 'fooBarBaz123',
+  },
+  append: {
+    fooBarBaz123: 'fooBarBaz123',
+  },
+  constructor: {
+    fooBarBaz123: 'fooBarBaz123',
+  },
+  prototype: {
+    fooBarBaz123: 'fooBarBaz123',
   },
   empty: null,
 }
@@ -29,25 +61,12 @@ test('it should be converted on success', assert => {
     assert.equal(config.headers['X-Requested-With'], 'XMLHttpRequest')
     assert.equal(config.params.user_id, 1)
     assert.equal(config.params.screen_name, 'yay')
-    assert.equal(config.data, JSON.stringify(data))
-    return [200, data, {'Content-Type': 'application/json'}]
+    assert.equal(config.data, JSON.stringify(snakeData))
+    return [200, snakeData, {'Content-Type': 'application/json'}]
   })
   client.post(
     '/success',
-    {
-      userId: 1,
-      somethingObject: {
-        fooBarBaz123: 'fooBarBaz123',
-      },
-      somethingArray: [
-        'foo',
-        { fooBarBaz456: 'fooBarBaz456' },
-      ],
-      entries: {
-        fooBarBaz123: 'fooBarBaz123',
-      },
-      empty: null,
-    },
+    camelData,
     {
       headers: {
         xRequestedWith: 'XMLHttpRequest',
@@ -58,20 +77,7 @@ test('it should be converted on success', assert => {
       },
     }
   ).then(response => {
-    assert.deepEqual(response.data, {
-      userId: 1,
-      somethingObject: {
-        fooBarBaz123: 'fooBarBaz123',
-      },
-      somethingArray: [
-        'foo',
-        { fooBarBaz456: 'fooBarBaz456' },
-      ],
-      entries: {
-        fooBarBaz123: 'fooBarBaz123',
-      },
-      empty: null,
-    })
+    assert.equal(JSON.stringify(response.data), JSON.stringify(camelData))
     assert.equal(response.headers.contentType, 'application/json')
     assert.end()
   })
@@ -83,25 +89,12 @@ test('it should be converted on failure', assert => {
     assert.equal(config.headers['X-Requested-With'], 'XMLHttpRequest')
     assert.equal(config.params.user_id, 1)
     assert.equal(config.params.screen_name, 'yay')
-    assert.equal(config.data, JSON.stringify(data))
-    return [400, data, {'Content-Type': 'application/json'}]
+    assert.equal(config.data, JSON.stringify(snakeData))
+    return [400, snakeData, {'Content-Type': 'application/json'}]
   })
   client.post(
     '/failure',
-    {
-      userId: 1,
-      somethingObject: {
-        fooBarBaz123: 'fooBarBaz123',
-      },
-      somethingArray: [
-        'foo',
-        { fooBarBaz456: 'fooBarBaz456' },
-      ],
-      entries: {
-        fooBarBaz123: 'fooBarBaz123',
-      },
-      empty: null,
-    },
+    camelData,
     {
       headers: {
         xRequestedWith: 'XMLHttpRequest',
@@ -112,20 +105,7 @@ test('it should be converted on failure', assert => {
       },
     }
   ).catch(error => {
-    assert.deepEqual(error.response.data, {
-      userId: 1,
-      somethingObject: {
-        fooBarBaz123: 'fooBarBaz123',
-      },
-      somethingArray: [
-        'foo',
-        { fooBarBaz456: 'fooBarBaz456' },
-      ],
-      entries: {
-        fooBarBaz123: 'fooBarBaz123',
-      },
-      empty: null,
-    })
+    assert.equal(JSON.stringify(error.response.data), JSON.stringify(camelData))
     assert.equal(error.response.headers.contentType, 'application/json')
     assert.end()
   })
