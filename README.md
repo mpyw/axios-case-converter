@@ -3,37 +3,36 @@
 [![npm version](https://badge.fury.io/js/axios-case-converter.svg)](https://badge.fury.io/js/axios-case-converter)
 [![Build Status](https://travis-ci.org/mpyw/axios-case-converter.svg?branch=master)](https://travis-ci.org/mpyw/axios-case-converter)
 
-Axios transformer/interceptor that converts *snake_case/camelCase*
+Axios transformer/interceptor that converts _snake_case/camelCase_
 
-- Converts outgoing `data` `params` object keys into *snake_case*
-- Converts incoming `data` object keys into *camelCase*
-- Converts outgoing `headers` object keys into *Header-Case*
-- Converts incoming `headers` object keys into *camelCase*
+- Converts outgoing `data` `params` object keys into _snake_case_
+- Converts incoming `data` object keys into _camelCase_
+- Converts outgoing `headers` object keys into _Header-Case_
+- Converts incoming `headers` object keys into _camelCase_
 
 ## Usage
 
-You can fully use *camelCase*.
+You can fully use _camelCase_.
 
 ```js
-import applyConverters from 'axios-case-converter'
-import axios from 'axios'
+import applyConverters from 'axios-case-converter';
+import axios from 'axios';
 
 (async () => {
-
-  const client = applyConverters(axios.create())
-  const { data } = await client.post('https://example.com/api/endpoint',
+  const client = applyConverters(axios.create());
+  const { data } = await client.post(
+    'https://example.com/api/endpoint',
     {
-      targetId: 1,
+      targetId: 1
     },
     {
       params: { userId: 1 },
-      headers: { userAgent: 'Mozilla' },
+      headers: { userAgent: 'Mozilla' }
     }
-  )
+  );
 
-  console.log(data.actionResult.users[0].screenName)
-
-})()
+  console.log(data.actionResult.users[0].screenName);
+})();
 ```
 
 ## Attention
@@ -46,9 +45,34 @@ If you use `FormData` on **React Native**, please ignore the following warnings 
 
 ```js
 // RN >= 0.52
-import { YellowBox } from 'react-native'
-YellowBox.ignoreWarnings(['Be careful that FormData cannot be transformed on React Native.'])
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings([
+  'Be careful that FormData cannot be transformed on React Native.'
+]);
 
 // RN < 0.52
-console.ignoredYellowBox = ['Be careful that FormData cannot be transformed on React Native.']
+console.ignoredYellowBox = [
+  'Be careful that FormData cannot be transformed on React Native.'
+];
 ```
+
+If you use **React Native** for **Android** development, you should use **Symbol** polyfill from core-js to avoid bugs with iterators:
+
+1. Create `polyfill.js` in root directory with code:
+
+```js
+global.Symbol = require('core-js/es6/symbol');
+require('core-js/fn/symbol/iterator');
+```
+
+2. Include `polyfill.js` in entry point of your app (ex. app.js):
+
+```js
+import { Platform } from 'react-native;
+...
+if (Platform.OS === 'android') {
+ require('./polyfill.js');
+}
+```
+
+[caused by this issue](https://github.com/facebook/react-native/issues/15902)
