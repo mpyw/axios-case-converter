@@ -37,6 +37,8 @@ import axios from 'axios';
 
 ## Attention
 
+### `FormData` compatibility
+
 If you use `FormData` on **Internet Explorer** or **Safari**, you need polyfill of `FormData.prototype.entries()`.
 
 - [jimmywarting/FormData: HTML5 `FormData` polyfill for Browsers.](https://github.com/jimmywarting/FormData)
@@ -56,7 +58,9 @@ console.ignoredYellowBox = [
 ];
 ```
 
-If you use **React Native** for **Android** development, you should use **Symbol** polyfill from core-js to avoid bugs with iterators:
+### `Symbol` compatibility
+
+If you use **React Native** for **Android** development, you should use **Symbol** polyfill from `core-js` to avoid bugs with iterators:
 
 1. Create `polyfill.js` in root directory with code:
 
@@ -65,14 +69,16 @@ global.Symbol = require('core-js/es6/symbol');
 require('core-js/fn/symbol/iterator');
 ```
 
-2. Include `polyfill.js` in entry point of your app (ex. app.js):
+2. Include `polyfill.js` in entry point of your app (e.g. `app.js`):
 
 ```js
-import { Platform } from 'react-native;
-...
+import { Platform } from 'react-native';
+
+// ...
+
 if (Platform.OS === 'android') {
- require('./polyfill.js');
+  require('./polyfill.js');
 }
 ```
 
-[caused by this issue](https://github.com/facebook/react-native/issues/15902)
+cf. [undefined is not a function(evaluating '_iterator\[typeof Symbol === "function"?Symbol.iterator:"@@iterator"\]()') · Issue #15902 · facebook/react-native](https://github.com/facebook/react-native/issues/15902)
