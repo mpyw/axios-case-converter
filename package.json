@@ -1,6 +1,6 @@
 {
   "name": "axios-case-converter",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {
@@ -33,24 +33,27 @@
   },
   "homepage": "https://github.com/mpyw/axios-interceptor-change-case#readme",
   "devDependencies": {
-    "axios": "^0.16.2",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/node": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "axios": "^0.18.0",
     "axios-mock-adapter": "^1.9.0",
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^7.2.3",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.7.0",
+    "babel-eslint": "^10.0.1",
     "cross-env": "^5.0.5",
-    "eslint": "^4.6.1",
+    "eslint": "^5.7.0",
     "eslint-plugin-react": "^7.3.0",
     "in-publish": "^2.0.0",
     "npm-run-all": "^4.1.1",
-    "redux": "^3.7.2",
+    "redux": "^4.0.1",
     "tap-spec": "^5.0.0",
     "tape": "^4.8.0",
     "utils-copy-error": "^1.0.1"
   },
   "dependencies": {
+    "@babel/runtime": "^7.0.0",
     "change-case": "^3.0.1"
   }
 }

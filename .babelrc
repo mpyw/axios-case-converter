@@ -1,12 +1,12 @@
 {
   "env": {
     "cjs": {
-      "presets": [["env"]],
-      "plugins": ["transform-runtime", ["transform-object-rest-spread", { "useBuiltIns": true }]]
+      "presets": [["@babel/preset-env"]],
+      "plugins": ["@babel/transform-runtime", ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }]]
     },
     "es": {
-      "presets": [["env", { "modules": false }]],
-      "plugins": ["transform-runtime", ["transform-object-rest-spread", { "useBuiltIns": true }]]
+      "presets": [["@babel/preset-env", { "modules": false }]],
+      "plugins": ["@babel/transform-runtime", ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }]]
     }
   }
 }
