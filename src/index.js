@@ -5,6 +5,14 @@ export const snakeParams = config => {
   if (config.params) {
     config.params = snake(config.params)
   }
+  
+  if (config.rawParams) {
+    config.parms = {
+      ...config.params,
+      ...config.rawParams
+    }
+  }
+  
   return config
 }
 export const snakeRequest = (data, headers) => {
