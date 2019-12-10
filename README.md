@@ -1,7 +1,7 @@
 # axios-case-converter
 
 [![npm version](https://badge.fury.io/js/axios-case-converter.svg)](https://badge.fury.io/js/axios-case-converter)
-[![Build Status](https://travis-ci.org/mpyw/axios-case-converter.svg?branch=master)](https://travis-ci.org/mpyw/axios-case-converter)
+[![Build Status](https://travis-ci.com/mpyw/axios-case-converter.svg?branch=master)](https://travis-ci.com/mpyw/axios-case-converter)
 
 Axios transformer/interceptor that converts _snake_case/camelCase_
 
