@@ -1,8 +1,7 @@
-import {
-  camel as ccCamel,
-  snake as ccSnake,
-  header as ccHeader,
-} from 'change-case'
+import { camelCase as ccCamel } from 'camel-case'
+import { snakeCase as ccSnake } from 'snake-case'
+import { headerCase as ccHeader } from 'header-case'
+
 import { isPlainObject, isURLSearchParams, isFormData } from './util'
 
 const transform = (data, fn, overwrite = false) => {

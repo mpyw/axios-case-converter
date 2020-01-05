@@ -54,6 +54,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "change-case": "^3.0.1"
+    "camel-case": "^4.1.1",
+    "header-case": "^2.0.3",
+    "snake-case": "^3.0.3"
   }
 }
