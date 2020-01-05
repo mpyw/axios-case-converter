@@ -26,7 +26,7 @@ const transform = (data, fn, overwrite = false) => {
     if (prototype && prototype.append) {
       prototype.append.call(store, key.replace(/[^[\]]+/g, k => fn(k)), transform(value, fn))
     } else if (key !== '__proto__') {
-      store[fn(key)] = transform(value, fn)
+      store[fn(typeof key === 'string' ? key : `${key}`)] = transform(value, fn)
     }
   }
   return store
