@@ -1,4 +1,4 @@
-import { header as ccHeader } from 'change-case'
+import { headerCase as ccHeader } from 'header-case'
 import { snake, camel, header } from './transform'
 
 export const snakeParams = config => {
