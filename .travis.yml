@@ -1,5 +1,15 @@
 language: node_js
+
 node_js:
-  - "node"
+  - stable
+  - lts/*
+
+dist: trusty
+sudo: false
+cache: yarn
+
 script:
-  - npm test
+  - yarn test --coverage
+
+after_success:
+  - travis_retry cat ./coverage/lcov.info | ./node_modules/.bin/coveralls

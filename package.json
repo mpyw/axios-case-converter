@@ -1,17 +1,18 @@
 {
   "name": "axios-case-converter",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {
-    "lint-src": "eslint src",
-    "lint-examples": "eslint examples",
-    "test": "npm run lint-src && cross-env BABEL_ENV=cjs babel-node test/index.js | tap-spec",
-    "test-without-lint": "cross-env BABEL_ENV=cjs babel-node test/index.js | tap-spec",
-    "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
-    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
+    "check": "tsc --noEmit",
+    "lint": "eslint {src,test}/**/*.ts",
+    "lint:fix": "eslint {src,test}/**/*.ts --fix",
+    "build:cjs": "BABEL_ENV=cjs babel src --out-dir lib --extensions .ts",
+    "build:es": "BABEL_ENV=es babel src --out-dir es --extensions .ts",
+    "build:typings": "tsc --outDir typings/ --emitDeclarationOnly",
     "build": "run-p build:*",
-    "prepublish": "in-publish && (git diff --no-ext-diff --quiet --exit-code src .gitignore package.json README.md LICENSE || (echo \"Please commit changes!\" && false)) && npm test && npm run build || not-in-publish"
+    "test": "jest",
+    "prepublishOnly": "git diff --no-ext-diff --quiet --exit-code src .gitignore package.json README.md LICENSE || (echo \"Please commit changes!\" && false) && npm test && npm run build"
   },
   "description": "Axios transformer/interceptor that converts snake_case/camelCase",
   "repository": {
@@ -32,30 +33,31 @@
     "url": "https://github.com/mpyw/axios-interceptor-change-case/issues"
   },
   "homepage": "https://github.com/mpyw/axios-interceptor-change-case#readme",
-  "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/node": "^7.0.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "axios": "^0.18.0",
-    "axios-mock-adapter": "^1.9.0",
-    "babel-eslint": "^10.0.1",
-    "cross-env": "^5.0.5",
-    "eslint": "^5.7.0",
-    "eslint-plugin-react": "^7.3.0",
-    "in-publish": "^2.0.0",
-    "npm-run-all": "^4.1.1",
-    "redux": "^4.0.1",
-    "tap-spec": "^5.0.0",
-    "tape": "^4.8.0",
-    "utils-copy-error": "^1.0.1"
-  },
   "dependencies": {
-    "@babel/runtime": "^7.0.0",
     "camel-case": "^4.1.1",
     "header-case": "^2.0.3",
     "snake-case": "^3.0.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-typescript": "^7.9.0",
+    "@types/axios": "^0.14.0",
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.9.2",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "axios-mock-adapter": "^1.17.0",
+    "coveralls": "^3.0.11",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "jest": "^25.1.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.0.1",
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3"
   }
 }

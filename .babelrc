@@ -1,12 +1,12 @@
 {
   "env": {
     "cjs": {
-      "presets": [["@babel/preset-env"]],
-      "plugins": ["@babel/transform-runtime", ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }]]
+      "presets": ["@babel/preset-env", "@babel/preset-typescript"],
+      "plugins": ["@babel/plugin-proposal-optional-chaining"]
     },
     "es": {
-      "presets": [["@babel/preset-env", { "modules": false }]],
-      "plugins": ["@babel/transform-runtime", ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }]]
+      "presets": ["@babel/preset-typescript"],
+      "plugins": ["@babel/plugin-proposal-optional-chaining"]
     }
   }
 }
