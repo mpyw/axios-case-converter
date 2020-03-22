@@ -9,6 +9,7 @@ sudo: false
 cache: yarn
 
 script:
+  - yarn lint
   - yarn test --coverage
 
 after_success:
