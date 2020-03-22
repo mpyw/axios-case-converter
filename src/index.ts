@@ -33,7 +33,7 @@ export const createSnakeRequest: CreateAxiosTransformer = (options?) => {
           delete headers[key];
           headers[
             Object.keys(
-              header({ [key]: value }, options) as TransformableObject
+              header({ [key]: null }, options) as TransformableObject
             )[0]
           ] = value;
         }
