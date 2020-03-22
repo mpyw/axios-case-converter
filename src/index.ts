@@ -61,16 +61,16 @@ const applyConverters: ApplyConverters = (axios, options?) => {
     options?.converters?.snakeRequest || createSnakeRequest(options),
     ...(Array.isArray(axios.defaults.transformRequest)
       ? axios.defaults.transformRequest
-      : axios.defaults.transformRequest === undefined
-      ? []
-      : [axios.defaults.transformRequest]),
+      : axios.defaults.transformRequest !== undefined
+      ? [axios.defaults.transformRequest]
+      : []),
   ];
   axios.defaults.transformResponse = [
     ...(Array.isArray(axios.defaults.transformResponse)
       ? axios.defaults.transformResponse
-      : axios.defaults.transformResponse === undefined
-      ? []
-      : [axios.defaults.transformResponse]),
+      : axios.defaults.transformResponse !== undefined
+      ? [axios.defaults.transformResponse]
+      : []),
     options?.converters?.camelResponse || createCamelResponse(options),
   ];
   axios.interceptors.request.use(
