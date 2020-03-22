@@ -1,5 +1,5 @@
 import { Options as NoCaseOptions } from "camel-case";
-import { AxiosRequestConfig, AxiosTransformer, AxiosInstance } from "axios";
+import { AxiosInstance, AxiosRequestConfig, AxiosTransformer } from "axios";
 
 // string transformers (change-case functions)
 export interface Transformer {

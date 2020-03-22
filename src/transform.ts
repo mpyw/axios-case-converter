@@ -5,10 +5,10 @@ import { preserveArrayBrackets, preserveSpecificKeys } from "./decorators";
 import { isFormData, isTransformable } from "./util";
 import {
   CreateTransform,
-  TransformUsingCallback,
-  Transformer,
   Transformable,
+  Transformer,
   TransformOptions,
+  TransformUsingCallback,
 } from "./types";
 
 const transformRecursive = (

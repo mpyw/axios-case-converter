@@ -1,11 +1,11 @@
 import { AxiosTransformer } from "axios";
-import { snake, camel, header } from "./transform";
+import { camel, header, snake } from "./transform";
 import { isPlainObject } from "./util";
 import {
   ApplyConverters,
+  AxiosInterceptor,
   CreateAxiosInterceptor,
   CreateAxiosTransformer,
-  AxiosInterceptor,
   TransformableObject,
 } from "./types";
 
