@@ -1,10 +1,11 @@
-import { Transformer } from "./types";
+import {
+  PreserveArrayBrackets,
+  PreserveSpecificKeys,
+  Transformer,
+} from "./types";
 
-export const preserveArrayBrackets = (fn: Transformer): Transformer => {
-  return (
-    input: Parameters<Transformer>[0],
-    options?: Parameters<Transformer>[1]
-  ): ReturnType<Transformer> => {
+export const preserveArrayBrackets: PreserveArrayBrackets = (fn) => {
+  return (input, options?): ReturnType<ReturnType<PreserveArrayBrackets>> => {
     return fn(input, {
       stripRegexp: /[^A-Z0-9[\]]+/gi,
       ...options,
@@ -12,14 +13,11 @@ export const preserveArrayBrackets = (fn: Transformer): Transformer => {
   };
 };
 
-export const preserveSpecificKeys = (
+export const preserveSpecificKeys: PreserveSpecificKeys = (
   fn: Transformer,
   keys: string[]
-): Transformer => {
-  return (
-    input: Parameters<Transformer>[0],
-    options?: Parameters<Transformer>[1]
-  ): ReturnType<Transformer> => {
+) => {
+  return (input, options?): ReturnType<ReturnType<PreserveSpecificKeys>> => {
     return keys.includes(input) ? input : fn(input, options);
   };
 };

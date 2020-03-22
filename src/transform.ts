@@ -1,7 +1,7 @@
 import { camelCase as camelCaseString } from "camel-case";
 import { snakeCase as snakeCaseString } from "snake-case";
 import { headerCase as headerCaseString } from "header-case";
-import { preserveArrayBrackets, preserveSpecificKeys } from "./composers";
+import { preserveArrayBrackets, preserveSpecificKeys } from "./decorators";
 import { isFormData, isTransformable } from "./util";
 import {
   CreateTransform,

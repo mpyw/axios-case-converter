@@ -6,6 +6,14 @@ export interface Transformer {
   (input: string, options?: NoCaseOptions): string;
 }
 
+// decorators for string transformers
+export interface PreserveArrayBrackets {
+  (fn: Transformer): Transformer;
+}
+export interface PreserveSpecificKeys {
+  (fn: Transformer, keys: string[]): Transformer;
+}
+
 // objects which can be handled in object transformers
 export interface TransformableObject {
   [key: string]: unknown;
