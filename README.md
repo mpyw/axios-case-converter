@@ -36,6 +36,24 @@ import axios from 'axios';
 })();
 ```
 
+## Options
+
+```js
+const client = applyConverters(axios.create(), options);
+```
+
+### `preservedKeys` : `array`
+
+Provide the keys that need to be excluded from being transformed.
+
+```js
+const options = {
+  preservedKeys: ["_preserve_this_key"]
+};
+```
+
+[Check the tests for more info](test/index.ts)
+
 ## Attention
 
 ### `FormData` compatibility
