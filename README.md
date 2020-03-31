@@ -42,7 +42,7 @@ import axios from 'axios';
 const client = applyConverters(axios.create(), options);
 ```
 
-### `preservedKeys` : `array`
+### `preservedKeys`: `string[]`
 
 Provide the keys that need to be excluded from being transformed.
 
