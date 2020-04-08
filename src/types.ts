@@ -47,7 +47,9 @@ export interface CreateTransform {
 }
 
 /** converters for axios and their factories */
-export type ConverterOptions = Omit<TransformOptions, "overwrite">;
+export type ConverterOptions = Omit<TransformOptions, "overwrite"> & {
+  ignoreHeaders?: boolean;
+};
 export interface AxiosInterceptor {
   (config: AxiosRequestConfig): AxiosRequestConfig;
 }

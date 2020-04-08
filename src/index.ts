@@ -22,7 +22,7 @@ export const createSnakeRequest: CreateAxiosTransformer = (options?) => {
     data: unknown,
     headers?: unknown
   ): ReturnType<ReturnType<CreateAxiosTransformer>> => {
-    if (isPlainObject(headers)) {
+    if (!options?.ignoreHeaders && isPlainObject(headers)) {
       for (const [key, value] of Object.entries(headers)) {
         header(value, { overwrite: true, ...options });
         if (
@@ -47,7 +47,9 @@ export const createCamelResponse: CreateAxiosTransformer = (options?) => {
     data: unknown,
     headers?: unknown
   ): ReturnType<ReturnType<CreateAxiosTransformer>> => {
-    camel(headers, { overwrite: true, ...options });
+    if (!options?.ignoreHeaders) {
+      camel(headers, { overwrite: true, ...options });
+    }
     return camel(data, options);
   };
 };
