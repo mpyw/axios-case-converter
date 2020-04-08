@@ -5,6 +5,8 @@ import { preserveArrayBrackets, preserveSpecificKeys } from "./decorators";
 import { isFormData, isTransformable } from "./util";
 import {
   CreateTransform,
+  CreateTransformOf,
+  CreateTransforms,
   Transformable,
   Transformer,
   TransformOptions,
@@ -82,5 +84,18 @@ export const createTransform: CreateTransform = (fn) => {
 export const snake = createTransform(snakeCaseString);
 export const camel = createTransform(camelCaseString);
 export const header = createTransform(headerCaseString);
+
+export const createTransformOf: CreateTransformOf = (functionName, options) => {
+  const fn = options?.[functionName];
+  return fn ? createTransform(fn) : { snake, camel, header }[functionName];
+};
+export const createTransforms: CreateTransforms = (options) => {
+  const transforms: ReturnType<CreateTransforms> = { snake, camel, header };
+  const functionNames = Object.keys(transforms) as (keyof typeof transforms)[];
+  for (const functionName of functionNames) {
+    transforms[functionName] = createTransformOf(functionName, options);
+  }
+  return transforms;
+};
 
 export default transform;

@@ -5,6 +5,11 @@ import { AxiosInstance, AxiosRequestConfig, AxiosTransformer } from "axios";
 export interface Transformer {
   (input: string, options?: NoCaseOptions): string;
 }
+export type Transformers = {
+  snake?: Transformer;
+  camel?: Transformer;
+  header?: Transformer;
+};
 
 /** decorators for string transformers */
 export interface PreserveArrayBrackets {
@@ -45,9 +50,16 @@ export interface Transform {
 export interface CreateTransform {
   (fn: Transformer): Transform;
 }
+export interface CreateTransformOf {
+  (type: keyof Transformers, options?: Transformers): Transform;
+}
+export interface CreateTransforms {
+  (options?: Transformers): Record<keyof Transformers, Transform>;
+}
 
 /** converters for axios and their factories */
 export type ConverterOptions = Omit<TransformOptions, "overwrite"> & {
+  caseFunctions?: Transformers;
   ignoreHeaders?: boolean;
 };
 export interface AxiosInterceptor {
