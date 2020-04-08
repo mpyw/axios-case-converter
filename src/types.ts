@@ -56,13 +56,12 @@ export interface CreateAxiosTransformer {
 }
 
 /** converter applier */
-export type ApplyConvertersOptions = {
+export type ApplyConvertersOptions = ConverterOptions & {
   converters?: {
     snakeRequest?: AxiosTransformer;
     camelResponse?: AxiosTransformer;
     snakeParams?: AxiosInterceptor;
   };
-  preservedKeys?: TransformOptions["preservedKeys"];
 };
 export interface ApplyConverters {
   (axios: AxiosInstance, options?: ApplyConvertersOptions): AxiosInstance;
