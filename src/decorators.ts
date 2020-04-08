@@ -1,5 +1,6 @@
 import {
   PreserveArrayBrackets,
+  PreservedKeysCondition,
   PreserveSpecificKeys,
   Transformer,
 } from "./types";
@@ -15,9 +16,14 @@ export const preserveArrayBrackets: PreserveArrayBrackets = (fn) => {
 
 export const preserveSpecificKeys: PreserveSpecificKeys = (
   fn: Transformer,
-  keys: string[]
+  keys: string[] | PreservedKeysCondition
 ) => {
+  const condition: PreservedKeysCondition =
+    typeof keys === "function"
+      ? keys
+      : (input): boolean => keys.includes(input);
+
   return (input, options?): ReturnType<ReturnType<PreserveSpecificKeys>> => {
-    return keys.includes(input) ? input : fn(input, options);
+    return condition(input, options) ? input : fn(input, options);
   };
 };

@@ -11,7 +11,7 @@ export interface PreserveArrayBrackets {
   (fn: Transformer): Transformer;
 }
 export interface PreserveSpecificKeys {
-  (fn: Transformer, keys: string[]): Transformer;
+  (fn: Transformer, keys: string[] | PreservedKeysCondition): Transformer;
 }
 
 /** objects which can be handled in object transformers */
@@ -22,9 +22,12 @@ export type Transformable = (unknown[] | object | FormData | URLSearchParams) &
   TransformableObject;
 
 /** object transformers and their factories */
+export interface PreservedKeysCondition {
+  (input: string, options?: NoCaseOptions): boolean;
+}
 export type TransformOptions = {
   overwrite?: boolean;
-  preservedKeys?: string[];
+  preservedKeys?: string[] | PreservedKeysCondition;
 };
 export interface TransformUsingCallback {
   (
