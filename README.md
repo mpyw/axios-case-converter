@@ -42,17 +42,64 @@ import axios from 'axios';
 const client = applyConverters(axios.create(), options);
 ```
 
-### `preservedKeys`: `string[]`
+### `preservedKeys`: `string[] | Function`
 
-Provide the keys that need to be excluded from being transformed.
+Disable transformation when the string matched or satisfied the condition.
 
 ```js
 const options = {
-  preservedKeys: ["_preserve_this_key"]
+  preservedKeys: ["preserve_this_key_1", "preserve_this_key_2"]
 };
 ```
 
-[Check the tests for more info](test/index.ts)
+```js
+const options = {
+  preservedKeys: (input) => {
+    return ["preserve_this_key_1", "preserve_this_key_2"].includes(input);
+  }
+};
+```
+
+### `ignoreHeaders`: `boolean`
+
+Disable HTTP headers transformation.
+
+```js
+const options = {
+  ignoreHeaders: true
+};
+```
+
+### `caseFunctions`: `{ snake?: Function, camel?: Function, header?: Function }`
+
+Override built-in `change-case` functions.
+
+```js
+const options = {
+  caseFunctions: {
+    camel: (input, options) => {
+      return (input.charAt(0).toLowerCase() + input.slice(1)).replace(/[-_](.)/g, (match, group1) => group1.toUpperCase());
+    },
+  }
+};
+```
+
+### `converters`: `{ snakeParams?: Function, snakeRequest?: Function, camelResponse?: Function }`
+
+Totally override `axios-case-converter` behaviors.
+
+```js
+const options = {
+  converters: {
+    snakeParams: (config) => {
+      // Disable query string transformation
+      return config;
+    }
+  }
+};
+```
+
+###### [Check the tests for more info](test/index.ts)
 
 ## Attention
 
