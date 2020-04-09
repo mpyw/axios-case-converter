@@ -5,13 +5,18 @@ import { AxiosInstance, AxiosRequestConfig, AxiosTransformer } from "axios";
 export interface Transformer {
   (input: string, options?: NoCaseOptions): string;
 }
+export type Transformers = {
+  snake?: Transformer;
+  camel?: Transformer;
+  header?: Transformer;
+};
 
 /** decorators for string transformers */
 export interface PreserveArrayBrackets {
   (fn: Transformer): Transformer;
 }
 export interface PreserveSpecificKeys {
-  (fn: Transformer, keys: string[]): Transformer;
+  (fn: Transformer, keys: string[] | PreservedKeysCondition): Transformer;
 }
 
 /** objects which can be handled in object transformers */
@@ -22,9 +27,12 @@ export type Transformable = (unknown[] | object | FormData | URLSearchParams) &
   TransformableObject;
 
 /** object transformers and their factories */
+export interface PreservedKeysCondition {
+  (input: string, options?: NoCaseOptions): boolean;
+}
 export type TransformOptions = {
   overwrite?: boolean;
-  preservedKeys?: string[];
+  preservedKeys?: string[] | PreservedKeysCondition;
 };
 export interface TransformUsingCallback {
   (
@@ -42,9 +50,18 @@ export interface Transform {
 export interface CreateTransform {
   (fn: Transformer): Transform;
 }
+export interface CreateTransformOf {
+  (type: keyof Transformers, options?: Transformers): Transform;
+}
+export interface CreateTransforms {
+  (options?: Transformers): Record<keyof Transformers, Transform>;
+}
 
 /** converters for axios and their factories */
-export type ConverterOptions = Omit<TransformOptions, "overwrite">;
+export type ConverterOptions = Omit<TransformOptions, "overwrite"> & {
+  caseFunctions?: Transformers;
+  ignoreHeaders?: boolean;
+};
 export interface AxiosInterceptor {
   (config: AxiosRequestConfig): AxiosRequestConfig;
 }
@@ -56,13 +73,12 @@ export interface CreateAxiosTransformer {
 }
 
 /** converter applier */
-export type ApplyConvertersOptions = {
+export type ApplyConvertersOptions = ConverterOptions & {
   converters?: {
     snakeRequest?: AxiosTransformer;
     camelResponse?: AxiosTransformer;
     snakeParams?: AxiosInterceptor;
   };
-  preservedKeys?: TransformOptions["preservedKeys"];
 };
 export interface ApplyConverters {
   (axios: AxiosInstance, options?: ApplyConvertersOptions): AxiosInstance;
