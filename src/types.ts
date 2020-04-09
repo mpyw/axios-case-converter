@@ -5,7 +5,7 @@ import { AxiosInstance, AxiosRequestConfig, AxiosTransformer } from "axios";
 export interface CaseFunction {
   (input: string, options?: NoCaseOptions): string;
 }
-export type Transformers = {
+export type CaseFunctions = {
   snake?: CaseFunction;
   camel?: CaseFunction;
   header?: CaseFunction;
@@ -51,15 +51,15 @@ export interface CreateTransform {
   (fn: CaseFunction): Transform;
 }
 export interface CreateTransformOf {
-  (type: keyof Transformers, options?: Transformers): Transform;
+  (type: keyof CaseFunctions, options?: CaseFunctions): Transform;
 }
 export interface CreateTransforms {
-  (options?: Transformers): Record<keyof Transformers, Transform>;
+  (options?: CaseFunctions): Record<keyof CaseFunctions, Transform>;
 }
 
 /** converters for axios and their factories */
 export type ConverterOptions = Omit<TransformOptions, "overwrite"> & {
-  caseFunctions?: Transformers;
+  caseFunctions?: CaseFunctions;
   ignoreHeaders?: boolean;
 };
 export interface AxiosInterceptor {
