@@ -11,8 +11,8 @@ export type CaseFunctions = {
 };
 
 /** decorators for string transformers */
-export interface PreserveArrayBrackets {
-  (fn: CaseFunction): CaseFunction;
+export interface ApplyCaseOptions {
+  (fn: CaseFunction, options?: NoCaseOptions): CaseFunction;
 }
 export interface PreserveSpecificKeys {
   (fn: CaseFunction, keys: string[] | PreservedKeysCondition): CaseFunction;
@@ -32,7 +32,7 @@ export interface PreservedKeysCondition {
 export type ObjectTransformerOptions = {
   overwrite?: boolean;
   preservedKeys?: string[] | PreservedKeysCondition;
-  stripArrayBrackets?: boolean;
+  caseOptions?: NoCaseOptions;
 };
 export interface ObjectTransformer {
   (data: unknown, options?: ObjectTransformerOptions): unknown;

@@ -1,7 +1,7 @@
 import { camelCase as camelCaseString } from "camel-case";
 import { snakeCase as snakeCaseString } from "snake-case";
 import { headerCase as headerCaseString } from "header-case";
-import { preserveArrayBrackets, preserveSpecificKeys } from "./decorators";
+import { applyCaseOptions, preserveSpecificKeys } from "./decorators";
 import { isFormData, isTransformable } from "./util";
 import {
   CaseFunction,
@@ -74,9 +74,10 @@ const transformObjectUsingCallback = (
   fn: CaseFunction,
   options?: ObjectTransformerOptions
 ): unknown => {
-  if (!options?.stripArrayBrackets) {
-    fn = preserveArrayBrackets(fn);
-  }
+  fn = applyCaseOptions(fn, {
+    stripRegexp: /[^A-Z0-9[\]]+/gi,
+    ...options?.caseOptions,
+  });
   if (options?.preservedKeys) {
     fn = preserveSpecificKeys(fn, options.preservedKeys);
   }

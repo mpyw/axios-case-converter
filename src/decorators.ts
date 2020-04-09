@@ -1,14 +1,14 @@
 import {
+  ApplyCaseOptions,
   CaseFunction,
-  PreserveArrayBrackets,
   PreservedKeysCondition,
   PreserveSpecificKeys,
 } from "./types";
 
-export const preserveArrayBrackets: PreserveArrayBrackets = (fn) => {
-  return (input, options?): ReturnType<ReturnType<PreserveArrayBrackets>> => {
+export const applyCaseOptions: ApplyCaseOptions = (fn, defaultOptions) => {
+  return (input, options?): ReturnType<ReturnType<ApplyCaseOptions>> => {
     return fn(input, {
-      stripRegexp: /[^A-Z0-9[\]]+/gi,
+      ...defaultOptions,
       ...options,
     });
   };
