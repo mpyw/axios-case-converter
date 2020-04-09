@@ -1,5 +1,5 @@
 import { AxiosTransformer } from "axios";
-import { createObjectTransformers } from "./transform";
+import { createObjectTransformers } from "./transformers";
 import { isPlainObject } from "./util";
 import {
   ApplyConverters,
