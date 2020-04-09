@@ -30,7 +30,7 @@ export type Transformable = (unknown[] | object | FormData | URLSearchParams) &
 export interface PreservedKeysCondition {
   (input: string, options?: NoCaseOptions): boolean;
 }
-export type TransformOptions = {
+export type ObjectTransformerOptions = {
   overwrite?: boolean;
   preservedKeys?: string[] | PreservedKeysCondition;
 };
@@ -38,7 +38,7 @@ export interface TransformUsingCallback {
   (
     data: unknown,
     fn: CaseFunction,
-    options?: TransformOptions | boolean
+    options?: ObjectTransformerOptions | boolean
   ): unknown;
 }
 export interface Transform {
@@ -58,7 +58,7 @@ export interface CreateTransforms {
 }
 
 /** converters for axios and their factories */
-export type ConverterOptions = Omit<TransformOptions, "overwrite"> & {
+export type ConverterOptions = Omit<ObjectTransformerOptions, "overwrite"> & {
   caseFunctions?: CaseFunctions;
   ignoreHeaders?: boolean;
 };

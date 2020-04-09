@@ -9,14 +9,14 @@ import {
   CreateTransforms,
   Transformable,
   CaseFunction,
-  TransformOptions,
+  ObjectTransformerOptions,
   TransformUsingCallback,
 } from "./types";
 
 const transformRecursive = (
   data: unknown,
   fn: CaseFunction,
-  overwrite: TransformOptions["overwrite"]
+  overwrite: ObjectTransformerOptions["overwrite"]
 ): unknown => {
   if (!isTransformable(data)) {
     return data;
