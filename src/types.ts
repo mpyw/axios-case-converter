@@ -34,17 +34,10 @@ export type ObjectTransformerOptions = {
   overwrite?: boolean;
   preservedKeys?: string[] | PreservedKeysCondition;
 };
-export interface TransformUsingCallback {
-  (
-    data: unknown,
-    fn: CaseFunction,
-    options?: ObjectTransformerOptions | boolean
-  ): unknown;
-}
 export interface ObjectTransformer {
   (
-    data: Parameters<TransformUsingCallback>[0],
-    options?: Parameters<TransformUsingCallback>[2]
+    data: unknown,
+    options?: ObjectTransformerOptions | boolean
   ): unknown;
 }
 export interface CreateTransform {

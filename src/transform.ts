@@ -10,10 +10,9 @@ import {
   Transformable,
   CaseFunction,
   ObjectTransformerOptions,
-  TransformUsingCallback,
 } from "./types";
 
-const transformRecursive = (
+const transformObjectUsingCallbackRecursive = (
   data: unknown,
   fn: CaseFunction,
   overwrite: ObjectTransformerOptions["overwrite"]
@@ -51,10 +50,10 @@ const transformRecursive = (
       prototype.append.call(
         store,
         typeof key === "string" ? fn(key) : key,
-        transformRecursive(value, fn, overwrite)
+        transformObjectUsingCallbackRecursive(value, fn, overwrite)
       );
     } else if (key !== "__proto__") {
-      store[fn(typeof key === "string" ? key : `${key}`)] = transformRecursive(
+      store[fn(typeof key === "string" ? key : `${key}`)] = transformObjectUsingCallbackRecursive(
         value,
         fn,
         overwrite
@@ -64,7 +63,7 @@ const transformRecursive = (
   return store;
 };
 
-const transform: TransformUsingCallback = (data, fn, options) => {
+const transformObjectUsingCallback = (data: unknown, fn: CaseFunction, options?: ObjectTransformerOptions | boolean): unknown => {
   // Backward compatibility
   options = typeof options === "boolean" ? { overwrite: options } : options;
 
@@ -72,30 +71,29 @@ const transform: TransformUsingCallback = (data, fn, options) => {
     preserveArrayBrackets(fn),
     options?.preservedKeys || []
   );
-  return transformRecursive(data, composedFn, options?.overwrite || false);
+  return transformObjectUsingCallbackRecursive(data, composedFn, options?.overwrite || false);
 };
 
 export const createTransform: CreateTransform = (fn) => {
   return (data, options): ReturnType<ReturnType<CreateTransform>> => {
-    return transform(data, fn, options);
+    return transformObjectUsingCallback(data, fn, options);
   };
 };
 
-export const snake = createTransform(snakeCaseString);
-export const camel = createTransform(camelCaseString);
-export const header = createTransform(headerCaseString);
+const objectTransformers = {
+  snake: createTransform(snakeCaseString),
+  camel: createTransform(camelCaseString),
+  header: createTransform(headerCaseString),
+};
 
 export const createTransformOf: CreateTransformOf = (functionName, options) => {
   const fn = options?.[functionName];
-  return fn ? createTransform(fn) : { snake, camel, header }[functionName];
+  return fn ? createTransform(fn) : objectTransformers[functionName];
 };
 export const createTransforms: CreateTransforms = (options) => {
-  const transforms: ReturnType<CreateTransforms> = { snake, camel, header };
-  const functionNames = Object.keys(transforms) as (keyof typeof transforms)[];
+  const functionNames = Object.keys(objectTransformers) as (keyof typeof objectTransformers)[];
   for (const functionName of functionNames) {
-    transforms[functionName] = createTransformOf(functionName, options);
+    objectTransformers[functionName] = createTransformOf(functionName, options);
   }
-  return transforms;
+  return objectTransformers;
 };
-
-export default transform;
