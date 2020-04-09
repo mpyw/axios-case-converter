@@ -74,26 +74,26 @@ const transformObjectUsingCallback = (data: unknown, fn: CaseFunction, options?:
   return transformObjectUsingCallbackRecursive(data, composedFn, options?.overwrite || false);
 };
 
-export const createTransform: CreateObjectTransformer = (fn) => {
+export const createObjectTransformer: CreateObjectTransformer = (fn) => {
   return (data, options): ReturnType<ReturnType<CreateObjectTransformer>> => {
     return transformObjectUsingCallback(data, fn, options);
   };
 };
 
 const objectTransformers = {
-  snake: createTransform(snakeCaseString),
-  camel: createTransform(camelCaseString),
-  header: createTransform(headerCaseString),
+  snake: createObjectTransformer(snakeCaseString),
+  camel: createObjectTransformer(camelCaseString),
+  header: createObjectTransformer(headerCaseString),
 };
 
-export const createTransformOf: CreateObjectTransformerOf = (functionName, options) => {
+export const createObjectTransformerOf: CreateObjectTransformerOf = (functionName, options) => {
   const fn = options?.[functionName];
-  return fn ? createTransform(fn) : objectTransformers[functionName];
+  return fn ? createObjectTransformer(fn) : objectTransformers[functionName];
 };
-export const createTransforms: CreateObjectTransformers = (options) => {
+export const createObjectTransformers: CreateObjectTransformers = (options) => {
   const functionNames = Object.keys(objectTransformers) as (keyof typeof objectTransformers)[];
   for (const functionName of functionNames) {
-    objectTransformers[functionName] = createTransformOf(functionName, options);
+    objectTransformers[functionName] = createObjectTransformerOf(functionName, options);
   }
   return objectTransformers;
 };

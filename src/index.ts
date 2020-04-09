@@ -1,5 +1,5 @@
 import { AxiosTransformer } from "axios";
-import { createTransforms } from "./transform";
+import { createObjectTransformers } from "./transform";
 import { isPlainObject } from "./util";
 import {
   ApplyConverters,
@@ -10,7 +10,7 @@ import {
 } from "./types";
 
 export const createSnakeParams: CreateAxiosInterceptor = (options?) => {
-  const { snake } = createTransforms(options?.caseFunctions);
+  const { snake } = createObjectTransformers(options?.caseFunctions);
   return (config): ReturnType<ReturnType<CreateAxiosInterceptor>> => {
     if (config.params) {
       config.params = snake(config.params, options);
@@ -19,7 +19,7 @@ export const createSnakeParams: CreateAxiosInterceptor = (options?) => {
   };
 };
 export const createSnakeRequest: CreateAxiosTransformer = (options?) => {
-  const { snake, header } = createTransforms(options?.caseFunctions);
+  const { snake, header } = createObjectTransformers(options?.caseFunctions);
   return (
     data: unknown,
     headers?: unknown
@@ -45,7 +45,7 @@ export const createSnakeRequest: CreateAxiosTransformer = (options?) => {
   };
 };
 export const createCamelResponse: CreateAxiosTransformer = (options?) => {
-  const { camel } = createTransforms(options?.caseFunctions);
+  const { camel } = createObjectTransformers(options?.caseFunctions);
   return (
     data: unknown,
     headers?: unknown
