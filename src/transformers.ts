@@ -74,13 +74,15 @@ const transformObjectUsingCallback = (
   fn: CaseFunction,
   options?: ObjectTransformerOptions
 ): unknown => {
-  const composedFn = preserveSpecificKeys(
-    preserveArrayBrackets(fn),
-    options?.preservedKeys || []
-  );
+  if (!options?.ignoreArrayBrackets) {
+    fn = preserveArrayBrackets(fn);
+  }
+  if (options?.preservedKeys) {
+    fn = preserveSpecificKeys(fn, options.preservedKeys);
+  }
   return transformObjectUsingCallbackRecursive(
     data,
-    composedFn,
+    fn,
     options?.overwrite || false
   );
 };
