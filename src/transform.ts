@@ -4,7 +4,7 @@ import { headerCase as headerCaseString } from "header-case";
 import { preserveArrayBrackets, preserveSpecificKeys } from "./decorators";
 import { isFormData, isTransformable } from "./util";
 import {
-  CreateTransform,
+  CreateObjectTransformer,
   CreateTransformOf,
   CreateTransforms,
   Transformable,
@@ -74,8 +74,8 @@ const transformObjectUsingCallback = (data: unknown, fn: CaseFunction, options?:
   return transformObjectUsingCallbackRecursive(data, composedFn, options?.overwrite || false);
 };
 
-export const createTransform: CreateTransform = (fn) => {
-  return (data, options): ReturnType<ReturnType<CreateTransform>> => {
+export const createTransform: CreateObjectTransformer = (fn) => {
+  return (data, options): ReturnType<ReturnType<CreateObjectTransformer>> => {
     return transformObjectUsingCallback(data, fn, options);
   };
 };

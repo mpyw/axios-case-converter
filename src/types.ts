@@ -40,7 +40,7 @@ export interface ObjectTransformer {
     options?: ObjectTransformerOptions | boolean
   ): unknown;
 }
-export interface CreateTransform {
+export interface CreateObjectTransformer {
   (fn: CaseFunction): ObjectTransformer;
 }
 export interface CreateTransformOf {
