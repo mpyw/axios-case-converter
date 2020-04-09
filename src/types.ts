@@ -46,7 +46,7 @@ export interface CreateObjectTransformer {
 export interface CreateObjectTransformerOf {
   (type: keyof CaseFunctions, options?: CaseFunctions): ObjectTransformer;
 }
-export interface CreateTransforms {
+export interface CreateObjectTransformers {
   (options?: CaseFunctions): Record<keyof CaseFunctions, ObjectTransformer>;
 }
 

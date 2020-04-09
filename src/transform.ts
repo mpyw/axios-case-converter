@@ -6,7 +6,7 @@ import { isFormData, isTransformable } from "./util";
 import {
   CreateObjectTransformer,
   CreateObjectTransformerOf,
-  CreateTransforms,
+  CreateObjectTransformers,
   Transformable,
   CaseFunction,
   ObjectTransformerOptions,
@@ -90,7 +90,7 @@ export const createTransformOf: CreateObjectTransformerOf = (functionName, optio
   const fn = options?.[functionName];
   return fn ? createTransform(fn) : objectTransformers[functionName];
 };
-export const createTransforms: CreateTransforms = (options) => {
+export const createTransforms: CreateObjectTransformers = (options) => {
   const functionNames = Object.keys(objectTransformers) as (keyof typeof objectTransformers)[];
   for (const functionName of functionNames) {
     objectTransformers[functionName] = createTransformOf(functionName, options);
