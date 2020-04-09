@@ -68,7 +68,7 @@ export interface CreateAxiosTransformer {
 }
 
 /** converter applier */
-export type ApplyConvertersOptions = AxiosCaseMiddlewareOptions & {
+export type ApplyCaseMiddlewareOptions = AxiosCaseMiddlewareOptions & {
   converters?: {
     snakeRequest?: AxiosTransformer;
     camelResponse?: AxiosTransformer;
@@ -76,5 +76,5 @@ export type ApplyConvertersOptions = AxiosCaseMiddlewareOptions & {
   };
 };
 export interface ApplyConverters {
-  (axios: AxiosInstance, options?: ApplyConvertersOptions): AxiosInstance;
+  (axios: AxiosInstance, options?: ApplyCaseMiddlewareOptions): AxiosInstance;
 }
