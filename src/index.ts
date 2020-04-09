@@ -1,9 +1,7 @@
-import { AxiosTransformer } from "axios";
 import { createObjectTransformers } from "./transformers";
 import { isPlainObject } from "./util";
 import {
   ApplyCaseMiddleware,
-  AxiosInterceptor,
   CreateAxiosInterceptor,
   CreateAxiosTransformer,
   TransformableObject,
@@ -62,10 +60,6 @@ export const createCamelResponseTransformer: CreateAxiosTransformer = (
     return camel(data, options);
   };
 };
-
-export const snakeParams: AxiosInterceptor = createSnakeParamsInterceptor();
-export const snakeRequest: AxiosTransformer = createSnakeRequestTransformer();
-export const camelResponse: AxiosTransformer = createCamelResponseTransformer();
 
 const applyCaseMiddleware: ApplyCaseMiddleware = (axios, options?) => {
   axios.defaults.transformRequest = [
