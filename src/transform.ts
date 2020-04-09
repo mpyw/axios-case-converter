@@ -4,15 +4,15 @@ import { headerCase as headerCaseString } from "header-case";
 import { preserveArrayBrackets, preserveSpecificKeys } from "./decorators";
 import { isFormData, isTransformable } from "./util";
 import {
+  CaseFunction,
+  CaseFunctions,
+  CaseFunctionTypes,
   CreateObjectTransformer,
   CreateObjectTransformerOf,
   CreateObjectTransformers,
-  Transformable,
-  CaseFunctionTypes,
-  CaseFunction,
-  CaseFunctions,
   ObjectTransformerOptions,
   ObjectTransformers,
+  Transformable,
 } from "./types";
 
 const caseFunctions: CaseFunctions = {

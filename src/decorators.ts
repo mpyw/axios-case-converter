@@ -1,8 +1,8 @@
 import {
+  CaseFunction,
   PreserveArrayBrackets,
   PreservedKeysCondition,
   PreserveSpecificKeys,
-  CaseFunction,
 } from "./types";
 
 export const preserveArrayBrackets: PreserveArrayBrackets = (fn) => {
