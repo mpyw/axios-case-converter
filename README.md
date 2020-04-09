@@ -11,6 +11,22 @@ Axios transformer/interceptor that converts _snake_case/camelCase_
 - Converts outgoing `headers` object keys into _Header-Case_
 - Converts incoming `headers` object keys into _camelCase_
 
+## Installing
+
+### NPM
+
+```
+npm install axios-case-converter
+```
+
+### CDN
+
+```html
+<script src="https://unpkg.com/axios-case-converter@latest/dist/axios-case-converter.min.js"></script>
+```
+
+It is strongly recommended that you replace `latest` into a fixed version.
+
 ## Usage
 
 You can fully use _camelCase_.
