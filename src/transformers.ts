@@ -74,7 +74,7 @@ const transformObjectUsingCallback = (
   fn: CaseFunction,
   options?: ObjectTransformerOptions
 ): unknown => {
-  if (!options?.ignoreArrayBrackets) {
+  if (!options?.stripArrayBrackets) {
     fn = preserveArrayBrackets(fn);
   }
   if (options?.preservedKeys) {

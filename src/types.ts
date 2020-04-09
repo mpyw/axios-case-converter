@@ -32,7 +32,7 @@ export interface PreservedKeysCondition {
 export type ObjectTransformerOptions = {
   overwrite?: boolean;
   preservedKeys?: string[] | PreservedKeysCondition;
-  ignoreArrayBrackets?: boolean;
+  stripArrayBrackets?: boolean;
 };
 export interface ObjectTransformer {
   (data: unknown, options?: ObjectTransformerOptions): unknown;
