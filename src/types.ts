@@ -34,10 +34,7 @@ export type ObjectTransformerOptions = {
   preservedKeys?: string[] | PreservedKeysCondition;
 };
 export interface ObjectTransformer {
-  (
-    data: unknown,
-    options?: ObjectTransformerOptions | boolean
-  ): unknown;
+  (data: unknown, options?: ObjectTransformerOptions | boolean): unknown;
 }
 export type ObjectTransformers = {
   [K in CaseFunctionTypes]: ObjectTransformer;
@@ -46,7 +43,10 @@ export interface CreateObjectTransformer {
   (fn: CaseFunction): ObjectTransformer;
 }
 export interface CreateObjectTransformerOf {
-  (type: CaseFunctionTypes, options?: Partial<CaseFunctions>): ObjectTransformer;
+  (
+    type: CaseFunctionTypes,
+    options?: Partial<CaseFunctions>
+  ): ObjectTransformer;
 }
 export interface CreateObjectTransformers {
   (options?: Partial<CaseFunctions>): ObjectTransformers;

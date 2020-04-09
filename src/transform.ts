@@ -8,8 +8,11 @@ import {
   CreateObjectTransformerOf,
   CreateObjectTransformers,
   Transformable,
+  CaseFunctionTypes,
   CaseFunction,
+  CaseFunctions,
   ObjectTransformerOptions,
+  ObjectTransformers,
 } from "./types";
 
 const transformObjectUsingCallbackRecursive = (
@@ -53,17 +56,19 @@ const transformObjectUsingCallbackRecursive = (
         transformObjectUsingCallbackRecursive(value, fn, overwrite)
       );
     } else if (key !== "__proto__") {
-      store[fn(typeof key === "string" ? key : `${key}`)] = transformObjectUsingCallbackRecursive(
-        value,
-        fn,
-        overwrite
-      );
+      store[
+        fn(typeof key === "string" ? key : `${key}`)
+      ] = transformObjectUsingCallbackRecursive(value, fn, overwrite);
     }
   }
   return store;
 };
 
-const transformObjectUsingCallback = (data: unknown, fn: CaseFunction, options?: ObjectTransformerOptions | boolean): unknown => {
+const transformObjectUsingCallback = (
+  data: unknown,
+  fn: CaseFunction,
+  options?: ObjectTransformerOptions | boolean
+): unknown => {
   // Backward compatibility
   options = typeof options === "boolean" ? { overwrite: options } : options;
 
@@ -71,7 +76,11 @@ const transformObjectUsingCallback = (data: unknown, fn: CaseFunction, options?:
     preserveArrayBrackets(fn),
     options?.preservedKeys || []
   );
-  return transformObjectUsingCallbackRecursive(data, composedFn, options?.overwrite || false);
+  return transformObjectUsingCallbackRecursive(
+    data,
+    composedFn,
+    options?.overwrite || false
+  );
 };
 
 export const createObjectTransformer: CreateObjectTransformer = (fn) => {
@@ -80,20 +89,28 @@ export const createObjectTransformer: CreateObjectTransformer = (fn) => {
   };
 };
 
-const objectTransformers = {
-  snake: createObjectTransformer(snakeCaseString),
-  camel: createObjectTransformer(camelCaseString),
-  header: createObjectTransformer(headerCaseString),
+const caseFunctions: CaseFunctions = {
+  snake: snakeCaseString,
+  camel: camelCaseString,
+  header: headerCaseString,
 };
 
-export const createObjectTransformerOf: CreateObjectTransformerOf = (functionName, options) => {
-  const fn = options?.[functionName];
-  return fn ? createObjectTransformer(fn) : objectTransformers[functionName];
+export const createObjectTransformerOf: CreateObjectTransformerOf = (
+  functionName,
+  options
+) => {
+  return createObjectTransformer(
+    options?.[functionName] || caseFunctions[functionName]
+  );
 };
 export const createObjectTransformers: CreateObjectTransformers = (options) => {
-  const functionNames = Object.keys(objectTransformers) as (keyof typeof objectTransformers)[];
+  const functionNames = Object.keys(caseFunctions) as CaseFunctionTypes[];
+  const objectTransformers = {} as ObjectTransformers;
   for (const functionName of functionNames) {
-    objectTransformers[functionName] = createObjectTransformerOf(functionName, options);
+    objectTransformers[functionName] = createObjectTransformerOf(
+      functionName,
+      options
+    );
   }
   return objectTransformers;
 };
