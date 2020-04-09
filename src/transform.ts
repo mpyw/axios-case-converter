@@ -15,6 +15,12 @@ import {
   ObjectTransformers,
 } from "./types";
 
+const caseFunctions: CaseFunctions = {
+  snake: snakeCaseString,
+  camel: camelCaseString,
+  header: headerCaseString,
+};
+
 const transformObjectUsingCallbackRecursive = (
   data: unknown,
   fn: CaseFunction,
@@ -63,7 +69,6 @@ const transformObjectUsingCallbackRecursive = (
   }
   return store;
 };
-
 const transformObjectUsingCallback = (
   data: unknown,
   fn: CaseFunction,
@@ -88,13 +93,6 @@ export const createObjectTransformer: CreateObjectTransformer = (fn) => {
     return transformObjectUsingCallback(data, fn, options);
   };
 };
-
-const caseFunctions: CaseFunctions = {
-  snake: snakeCaseString,
-  camel: camelCaseString,
-  header: headerCaseString,
-};
-
 export const createObjectTransformerOf: CreateObjectTransformerOf = (
   functionName,
   options
