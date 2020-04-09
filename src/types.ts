@@ -6,9 +6,7 @@ export interface CaseFunction {
   (input: string, options?: NoCaseOptions): string;
 }
 export type CaseFunctions = {
-  snake?: CaseFunction;
-  camel?: CaseFunction;
-  header?: CaseFunction;
+  [K in "snake" | "camel" | "header"]: CaseFunction;
 };
 
 /** decorators for string transformers */
@@ -44,15 +42,15 @@ export interface CreateObjectTransformer {
   (fn: CaseFunction): ObjectTransformer;
 }
 export interface CreateObjectTransformerOf {
-  (type: keyof CaseFunctions, options?: CaseFunctions): ObjectTransformer;
+  (type: keyof CaseFunctions, options?: Partial<CaseFunctions>): ObjectTransformer;
 }
 export interface CreateObjectTransformers {
-  (options?: CaseFunctions): Record<keyof CaseFunctions, ObjectTransformer>;
+  (options?: Partial<CaseFunctions>): Record<keyof CaseFunctions, ObjectTransformer>;
 }
 
 /** converters for axios and their factories */
 export type ConverterOptions = Omit<ObjectTransformerOptions, "overwrite"> & {
-  caseFunctions?: CaseFunctions;
+  caseFunctions?: Partial<CaseFunctions>;
   ignoreHeaders?: boolean;
 };
 export interface AxiosInterceptor {
