@@ -9,7 +9,9 @@ import {
   TransformableObject,
 } from "./types";
 
-export const createSnakeParams: CreateAxiosInterceptor = (options?) => {
+export const createSnakeParamsInterceptor: CreateAxiosInterceptor = (
+  options?
+) => {
   const { snake } = createObjectTransformers(options?.caseFunctions);
   return (config): ReturnType<ReturnType<CreateAxiosInterceptor>> => {
     if (config.params) {
@@ -18,7 +20,9 @@ export const createSnakeParams: CreateAxiosInterceptor = (options?) => {
     return config;
   };
 };
-export const createSnakeRequest: CreateAxiosTransformer = (options?) => {
+export const createSnakeRequestTransformer: CreateAxiosTransformer = (
+  options?
+) => {
   const { snake, header } = createObjectTransformers(options?.caseFunctions);
   return (
     data: unknown,
@@ -44,7 +48,9 @@ export const createSnakeRequest: CreateAxiosTransformer = (options?) => {
     return snake(data, options);
   };
 };
-export const createCamelResponse: CreateAxiosTransformer = (options?) => {
+export const createCamelResponseTransformer: CreateAxiosTransformer = (
+  options?
+) => {
   const { camel } = createObjectTransformers(options?.caseFunctions);
   return (
     data: unknown,
@@ -57,13 +63,14 @@ export const createCamelResponse: CreateAxiosTransformer = (options?) => {
   };
 };
 
-export const snakeParams: AxiosInterceptor = createSnakeParams();
-export const snakeRequest: AxiosTransformer = createSnakeRequest();
-export const camelResponse: AxiosTransformer = createCamelResponse();
+export const snakeParams: AxiosInterceptor = createSnakeParamsInterceptor();
+export const snakeRequest: AxiosTransformer = createSnakeRequestTransformer();
+export const camelResponse: AxiosTransformer = createCamelResponseTransformer();
 
 const applyCaseMiddleware: ApplyCaseMiddleware = (axios, options?) => {
   axios.defaults.transformRequest = [
-    options?.caseMiddleware?.requestTransformer || createSnakeRequest(options),
+    options?.caseMiddleware?.requestTransformer ||
+      createSnakeRequestTransformer(options),
     ...(Array.isArray(axios.defaults.transformRequest)
       ? axios.defaults.transformRequest
       : axios.defaults.transformRequest !== undefined
@@ -77,10 +84,11 @@ const applyCaseMiddleware: ApplyCaseMiddleware = (axios, options?) => {
       ? [axios.defaults.transformResponse]
       : []),
     options?.caseMiddleware?.responseTransformer ||
-      createCamelResponse(options),
+      createCamelResponseTransformer(options),
   ];
   axios.interceptors.request.use(
-    options?.caseMiddleware?.requestInterceptor || createSnakeParams(options)
+    options?.caseMiddleware?.requestInterceptor ||
+      createSnakeParamsInterceptor(options)
   );
   return axios;
 };
