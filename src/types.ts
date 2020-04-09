@@ -41,20 +41,20 @@ export interface TransformUsingCallback {
     options?: ObjectTransformerOptions | boolean
   ): unknown;
 }
-export interface Transform {
+export interface ObjectTransformer {
   (
     data: Parameters<TransformUsingCallback>[0],
     options?: Parameters<TransformUsingCallback>[2]
   ): unknown;
 }
 export interface CreateTransform {
-  (fn: CaseFunction): Transform;
+  (fn: CaseFunction): ObjectTransformer;
 }
 export interface CreateTransformOf {
-  (type: keyof CaseFunctions, options?: CaseFunctions): Transform;
+  (type: keyof CaseFunctions, options?: CaseFunctions): ObjectTransformer;
 }
 export interface CreateTransforms {
-  (options?: CaseFunctions): Record<keyof CaseFunctions, Transform>;
+  (options?: CaseFunctions): Record<keyof CaseFunctions, ObjectTransformer>;
 }
 
 /** converters for axios and their factories */
