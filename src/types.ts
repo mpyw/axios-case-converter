@@ -2,21 +2,21 @@ import { Options as NoCaseOptions } from "camel-case";
 import { AxiosInstance, AxiosRequestConfig, AxiosTransformer } from "axios";
 
 /** string transformers (change-case functions) */
-export interface Transformer {
+export interface CaseFunction {
   (input: string, options?: NoCaseOptions): string;
 }
 export type Transformers = {
-  snake?: Transformer;
-  camel?: Transformer;
-  header?: Transformer;
+  snake?: CaseFunction;
+  camel?: CaseFunction;
+  header?: CaseFunction;
 };
 
 /** decorators for string transformers */
 export interface PreserveArrayBrackets {
-  (fn: Transformer): Transformer;
+  (fn: CaseFunction): CaseFunction;
 }
 export interface PreserveSpecificKeys {
-  (fn: Transformer, keys: string[] | PreservedKeysCondition): Transformer;
+  (fn: CaseFunction, keys: string[] | PreservedKeysCondition): CaseFunction;
 }
 
 /** objects which can be handled in object transformers */
@@ -37,7 +37,7 @@ export type TransformOptions = {
 export interface TransformUsingCallback {
   (
     data: unknown,
-    fn: Transformer,
+    fn: CaseFunction,
     options?: TransformOptions | boolean
   ): unknown;
 }
@@ -48,7 +48,7 @@ export interface Transform {
   ): unknown;
 }
 export interface CreateTransform {
-  (fn: Transformer): Transform;
+  (fn: CaseFunction): Transform;
 }
 export interface CreateTransformOf {
   (type: keyof Transformers, options?: Transformers): Transform;

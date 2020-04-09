@@ -2,7 +2,7 @@ import {
   PreserveArrayBrackets,
   PreservedKeysCondition,
   PreserveSpecificKeys,
-  Transformer,
+  CaseFunction,
 } from "./types";
 
 export const preserveArrayBrackets: PreserveArrayBrackets = (fn) => {
@@ -15,7 +15,7 @@ export const preserveArrayBrackets: PreserveArrayBrackets = (fn) => {
 };
 
 export const preserveSpecificKeys: PreserveSpecificKeys = (
-  fn: Transformer,
+  fn: CaseFunction,
   keys: string[] | PreservedKeysCondition
 ) => {
   const condition: PreservedKeysCondition =
