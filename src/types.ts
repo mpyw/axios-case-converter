@@ -5,8 +5,9 @@ import { AxiosInstance, AxiosRequestConfig, AxiosTransformer } from "axios";
 export interface CaseFunction {
   (input: string, options?: NoCaseOptions): string;
 }
+export type CaseFunctionTypes = "snake" | "camel" | "header";
 export type CaseFunctions = {
-  [K in "snake" | "camel" | "header"]: CaseFunction;
+  [K in CaseFunctionTypes]: CaseFunction;
 };
 
 /** decorators for string transformers */
@@ -38,14 +39,17 @@ export interface ObjectTransformer {
     options?: ObjectTransformerOptions | boolean
   ): unknown;
 }
+export type ObjectTransformers = {
+  [K in CaseFunctionTypes]: ObjectTransformer;
+};
 export interface CreateObjectTransformer {
   (fn: CaseFunction): ObjectTransformer;
 }
 export interface CreateObjectTransformerOf {
-  (type: keyof CaseFunctions, options?: Partial<CaseFunctions>): ObjectTransformer;
+  (type: CaseFunctionTypes, options?: Partial<CaseFunctions>): ObjectTransformer;
 }
 export interface CreateObjectTransformers {
-  (options?: Partial<CaseFunctions>): Record<keyof CaseFunctions, ObjectTransformer>;
+  (options?: Partial<CaseFunctions>): ObjectTransformers;
 }
 
 /** converters for axios and their factories */
