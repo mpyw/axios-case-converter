@@ -72,11 +72,8 @@ const transformObjectUsingCallbackRecursive = (
 const transformObjectUsingCallback = (
   data: unknown,
   fn: CaseFunction,
-  options?: ObjectTransformerOptions | boolean
+  options?: ObjectTransformerOptions
 ): unknown => {
-  // Backward compatibility
-  options = typeof options === "boolean" ? { overwrite: options } : options;
-
   const composedFn = preserveSpecificKeys(
     preserveArrayBrackets(fn),
     options?.preservedKeys || []
