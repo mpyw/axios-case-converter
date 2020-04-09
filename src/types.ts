@@ -53,7 +53,10 @@ export interface CreateObjectTransformers {
 }
 
 /** converters for axios and their factories */
-export type AxiosCaseMiddlewareOptions = Omit<ObjectTransformerOptions, "overwrite"> & {
+export type AxiosCaseMiddlewareOptions = Omit<
+  ObjectTransformerOptions,
+  "overwrite"
+> & {
   caseFunctions?: Partial<CaseFunctions>;
   ignoreHeaders?: boolean;
 };
@@ -70,9 +73,9 @@ export interface CreateAxiosTransformer {
 /** converter applier */
 export type ApplyCaseMiddlewareOptions = AxiosCaseMiddlewareOptions & {
   caseMiddleware?: {
-    snakeRequest?: AxiosTransformer;
-    camelResponse?: AxiosTransformer;
-    snakeParams?: AxiosInterceptor;
+    requestTransformer?: AxiosTransformer;
+    responseTransformer?: AxiosTransformer;
+    requestInterceptor?: AxiosInterceptor;
   };
 };
 export interface ApplyConverters {
