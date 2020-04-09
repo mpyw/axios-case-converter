@@ -39,7 +39,7 @@ import axios from 'axios';
 ## Options
 
 ```js
-const client = applyConverters(axios.create(), options);
+const client = applyCaseMiddleware(axios.create(), options);
 ```
 
 ### `preservedKeys`: `string[] | Function`

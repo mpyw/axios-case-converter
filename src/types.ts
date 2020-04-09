@@ -78,6 +78,6 @@ export type ApplyCaseMiddlewareOptions = AxiosCaseMiddlewareOptions & {
     requestInterceptor?: AxiosInterceptor;
   };
 };
-export interface ApplyConverters {
+export interface ApplyCaseMiddleware {
   (axios: AxiosInstance, options?: ApplyCaseMiddlewareOptions): AxiosInstance;
 }

@@ -2,7 +2,7 @@ import { AxiosTransformer } from "axios";
 import { createObjectTransformers } from "./transformers";
 import { isPlainObject } from "./util";
 import {
-  ApplyConverters,
+  ApplyCaseMiddleware,
   AxiosInterceptor,
   CreateAxiosInterceptor,
   CreateAxiosTransformer,
@@ -61,7 +61,7 @@ export const snakeParams: AxiosInterceptor = createSnakeParams();
 export const snakeRequest: AxiosTransformer = createSnakeRequest();
 export const camelResponse: AxiosTransformer = createCamelResponse();
 
-const applyConverters: ApplyConverters = (axios, options?) => {
+const applyCaseMiddleware: ApplyCaseMiddleware = (axios, options?) => {
   axios.defaults.transformRequest = [
     options?.caseMiddleware?.requestTransformer || createSnakeRequest(options),
     ...(Array.isArray(axios.defaults.transformRequest)
@@ -85,5 +85,5 @@ const applyConverters: ApplyConverters = (axios, options?) => {
   return axios;
 };
 
-export default applyConverters;
+export default applyCaseMiddleware;
 export * from "./types";
