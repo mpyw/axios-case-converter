@@ -5,7 +5,7 @@ import { preserveArrayBrackets, preserveSpecificKeys } from "./decorators";
 import { isFormData, isTransformable } from "./util";
 import {
   CreateObjectTransformer,
-  CreateTransformOf,
+  CreateObjectTransformerOf,
   CreateTransforms,
   Transformable,
   CaseFunction,
@@ -86,7 +86,7 @@ const objectTransformers = {
   header: createTransform(headerCaseString),
 };
 
-export const createTransformOf: CreateTransformOf = (functionName, options) => {
+export const createTransformOf: CreateObjectTransformerOf = (functionName, options) => {
   const fn = options?.[functionName];
   return fn ? createTransform(fn) : objectTransformers[functionName];
 };
