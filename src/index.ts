@@ -63,7 +63,7 @@ export const camelResponse: AxiosTransformer = createCamelResponse();
 
 const applyConverters: ApplyConverters = (axios, options?) => {
   axios.defaults.transformRequest = [
-    options?.converters?.snakeRequest || createSnakeRequest(options),
+    options?.caseMiddleware?.snakeRequest || createSnakeRequest(options),
     ...(Array.isArray(axios.defaults.transformRequest)
       ? axios.defaults.transformRequest
       : axios.defaults.transformRequest !== undefined
@@ -76,10 +76,10 @@ const applyConverters: ApplyConverters = (axios, options?) => {
       : axios.defaults.transformResponse !== undefined
       ? [axios.defaults.transformResponse]
       : []),
-    options?.converters?.camelResponse || createCamelResponse(options),
+    options?.caseMiddleware?.camelResponse || createCamelResponse(options),
   ];
   axios.interceptors.request.use(
-    options?.converters?.snakeParams || createSnakeParams(options)
+    options?.caseMiddleware?.snakeParams || createSnakeParams(options)
   );
   return axios;
 };
