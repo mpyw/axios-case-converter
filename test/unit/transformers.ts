@@ -1,5 +1,11 @@
-import { createObjectTransformer } from "../../src/transformers";
+import {
+  createObjectTransformer,
+  createObjectTransformerOf,
+  createObjectTransformers,
+} from "../../src/transformers";
 import { noCase } from "no-case";
+import { snakeCase } from "snake-case";
+import { camelCase } from "camel-case";
 
 beforeEach(() => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -113,6 +119,7 @@ test("it should recursively recreate objects", () => {
       nestedItemKey: "nestedItemKey",
     },
   };
+
   const after = createObjectTransformer(noCase)(before);
 
   expect(after).toBeInstanceOf(Object);
@@ -136,6 +143,7 @@ test("it should recursively overwrite objects", () => {
       nestedItemKey: "nestedItemKey",
     },
   };
+
   const after = createObjectTransformer(noCase)(before, { overwrite: true });
 
   expect(after).toBeInstanceOf(Object);
@@ -145,4 +153,99 @@ test("it should recursively overwrite objects", () => {
   expect(JSON.stringify(after)).toBe(
     '{"simple key":"valueOne","array key":["arrayValue","arrayValue",{"array item key":"arrayNestedValue"}],"nested key":{"nested item key":"nestedItemKey"}}'
   );
+});
+
+test("it should recreate null-prototyped objects", () => {
+  const before = Object.create(null);
+  before.simpleKey = "valueOne";
+
+  const after = createObjectTransformer(noCase)(before);
+
+  expect(after).not.toBeInstanceOf(Object);
+  expect(Object.getPrototypeOf(after)).toBeNull();
+  expect(JSON.stringify(before)).toBe('{"simpleKey":"valueOne"}');
+  expect(JSON.stringify(after)).toBe('{"simple key":"valueOne"}');
+});
+
+test("it should overwrite null-prototyped objects", () => {
+  const before = Object.create(null);
+  before.simpleKey = "valueOne";
+
+  const after = createObjectTransformer(noCase)(before, { overwrite: true });
+
+  expect(after).not.toBeInstanceOf(Object);
+  expect(Object.getPrototypeOf(after)).toBeNull();
+  expect(JSON.stringify(before)).toBe('{"simple key":"valueOne"}');
+  expect(JSON.stringify(after)).toBe('{"simple key":"valueOne"}');
+});
+
+test("it should prevent prototype pollution attack", () => {
+  const before = JSON.parse(
+    '{"simpleKey":"valueOne","__proto__":{"attacked":true}}'
+  );
+
+  const after = createObjectTransformer(noCase)(before);
+
+  expect(after).toBeInstanceOf(Object);
+  expect(Object.getPrototypeOf(after).attacked).toBeUndefined();
+  expect(JSON.stringify(before)).toBe(
+    '{"simpleKey":"valueOne","__proto__":{"attacked":true}}'
+  );
+  expect(JSON.stringify(after)).toBe('{"simple key":"valueOne"}');
+});
+
+test("it should replace built-in change-case functions", () => {
+  const { snake: fakeSnake, camel: fakeCamel } = createObjectTransformers({
+    snake: camelCase,
+    camel: snakeCase,
+  });
+
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  expect(fakeSnake({ user_profile: true })).toEqual({ userProfile: true });
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  expect(fakeCamel({ userProfile: true })).toEqual({ user_profile: true });
+});
+
+test("it should override change-case function options", () => {
+  const camel = createObjectTransformerOf("camel");
+  expect(camel({ "user_profile[screen_name]": true })).toEqual({
+    "userProfile[screenName]": true,
+  });
+  expect(
+    camel(
+      { "user_profile[screen_name]": true },
+      {
+        caseOptions: { stripRegexp: /[^A-Z0-9]+/gi },
+      }
+    )
+  ).toEqual({ userProfileScreenName: true });
+});
+
+test("it should override preserve specific keys", () => {
+  const camel = createObjectTransformerOf("camel");
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  expect(camel({ user_profile: true, other_profile: true })).toEqual({
+    userProfile: true,
+    otherProfile: true,
+  });
+  expect(
+    camel(
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      { user_profile: true, other_profile: true },
+      {
+        preservedKeys: ["user_profile"],
+      }
+    )
+    // eslint-disable-next-line @typescript-eslint/camelcase
+  ).toEqual({ user_profile: true, otherProfile: true });
+  expect(
+    camel(
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      { user_profile: true, other_profile: true },
+      {
+        preservedKeys: (key) => key === "user_profile",
+      }
+    )
+    // eslint-disable-next-line @typescript-eslint/camelcase
+  ).toEqual({ user_profile: true, otherProfile: true });
 });
