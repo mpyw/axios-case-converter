@@ -114,7 +114,7 @@ const options = {
 };
 ```
 
-###### [Check the tests for more info](test/index.ts)
+###### [Check the tests for more info](test)
 
 ## Attention
 
