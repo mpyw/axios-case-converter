@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
-    "lib": ["dom", "dom.iterable"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "es2015.iterable"
+    ],
     "sourceRoot": "src/",
     "declaration": true,
     "sourceMap": true,

@@ -56,8 +56,14 @@ const transformObjectUsingCallbackRecursive = (
     ? Object.create(null)
     : new prototype.constructor();
 
-  for (const [key, value] of prototype?.entries?.call(data) ||
-    Object.entries(data)) {
+  const entries: [unknown, unknown][] | Iterable<[unknown, unknown]> =
+    overwrite && prototype?.entries
+      ? [...prototype?.entries?.call(data)]
+      : prototype?.entries
+      ? prototype?.entries?.call(data)
+      : Object.entries(data);
+
+  for (const [key, value] of entries) {
     if (prototype?.append) {
       prototype.append.call(
         store,
