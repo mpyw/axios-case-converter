@@ -37,6 +37,9 @@ const transformObjectUsingCallbackRecursive = (
     (!data.entries || (overwrite && !data.delete))
   ) {
     const type = isFormData(data) ? "FormData" : "URLSearchParams";
+    const polyfill = isFormData(data)
+      ? "https://github.com/jimmywarting/FormData"
+      : "https://github.com/jerrybendy/url-search-params-polyfill";
     if (
       typeof navigator !== "undefined" &&
       navigator.product === "ReactNative"
@@ -49,13 +52,13 @@ const transformObjectUsingCallbackRecursive = (
       if (!data.entries) {
         // You need to polyfill `entries` method
         console.warn(
-          `You must use polyfill of ${type}.prototype.entries() on Internet Explorer or Safari: https://github.com/jimmywarting/FormData`
+          `You must use polyfill of ${type}.prototype.entries() on Internet Explorer or Safari: ${polyfill}`
         );
       }
       if (overwrite && !data.delete) {
         // You need to polyfill `delete` method for overwriting
         console.warn(
-          `You must use polyfill of ${type}.prototype.delete() on Internet Explorer or Safari: https://github.com/jimmywarting/FormData`
+          `You must use polyfill of ${type}.prototype.delete() on Internet Explorer or Safari: ${polyfill}`
         );
       }
     }
