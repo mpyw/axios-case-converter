@@ -76,29 +76,34 @@ const transformObjectUsingCallbackRecursive = (
     ? Object.create(null)
     : new prototype.constructor();
 
-  // FormData/URLSearchParams can accept duplicated keys,
-  // so we need to clean up all entries before overwriting.
+  // We need to clean up all entries before overwriting.
   let series:
     | Iterable<[unknown, unknown]>
     | IterableIterator<[unknown, unknown]>;
-  if (overwrite && (isFormData(data) || isURLSearchParams(data))) {
-    series = [...(prototype as FormData | URLSearchParams).entries.call(data)];
-    for (const [key] of series) {
-      data.delete(key as string);
+  if (isFormData(data) || isURLSearchParams(data)) {
+    // Create native iterator from FormData/URLSearchParams
+    series = data.entries();
+    if (overwrite) {
+      // When overwriting, native iterator needs to be copied as array.
+      series = [...series];
+      for (const [key] of series) {
+        data.delete(key as string);
+      }
     }
-  } else if (isFormData(data) || isURLSearchParams(data)) {
-    series = (prototype as FormData | URLSearchParams).entries.call(data);
   } else {
+    // Create array from objects
     series = Object.entries(data);
+    // Array keys never change, so we don't need to clean up
+    if (overwrite && !Array.isArray(data)) {
+      for (const [key] of series) {
+        delete data[key as string];
+      }
+    }
   }
 
   for (const [key, value] of series) {
-    if (prototype?.append) {
-      (prototype as FormData | URLSearchParams).append.call(
-        store,
-        fn(key as string),
-        value as string & File
-      );
+    if (isFormData(store) || isURLSearchParams(store)) {
+      store.append(fn(key as string), value as string & File);
     } else if (key !== "__proto__") {
       store[
         fn(typeof key === "string" ? key : `${key}`)

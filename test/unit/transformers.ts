@@ -100,3 +100,49 @@ test("it should overwrite FormData", () => {
     '[["key one","valueOne"],["key one","valueOne"],["key two","valueTwo"],["array list[array key]","arrayItem"],["array list[array key]","arrayItem"]]'
   );
 });
+
+test("it should recursively recreate objects", () => {
+  const before = {
+    simpleKey: "valueOne",
+    arrayKey: [
+      "arrayValue",
+      "arrayValue",
+      { arrayItemKey: "arrayNestedValue" },
+    ],
+    nestedKey: {
+      nestedItemKey: "nestedItemKey",
+    },
+  };
+  const after = createObjectTransformer(noCase)(before);
+
+  expect(after).toBeInstanceOf(Object);
+  expect(JSON.stringify(before)).toBe(
+    '{"simpleKey":"valueOne","arrayKey":["arrayValue","arrayValue",{"arrayItemKey":"arrayNestedValue"}],"nestedKey":{"nestedItemKey":"nestedItemKey"}}'
+  );
+  expect(JSON.stringify(after)).toBe(
+    '{"simple key":"valueOne","array key":["arrayValue","arrayValue",{"array item key":"arrayNestedValue"}],"nested key":{"nested item key":"nestedItemKey"}}'
+  );
+});
+
+test("it should recursively overwrite objects", () => {
+  const before = {
+    simpleKey: "valueOne",
+    arrayKey: [
+      "arrayValue",
+      "arrayValue",
+      { arrayItemKey: "arrayNestedValue" },
+    ],
+    nestedKey: {
+      nestedItemKey: "nestedItemKey",
+    },
+  };
+  const after = createObjectTransformer(noCase)(before, { overwrite: true });
+
+  expect(after).toBeInstanceOf(Object);
+  expect(JSON.stringify(before)).toBe(
+    '{"simple key":"valueOne","array key":["arrayValue","arrayValue",{"array item key":"arrayNestedValue"}],"nested key":{"nested item key":"nestedItemKey"}}'
+  );
+  expect(JSON.stringify(after)).toBe(
+    '{"simple key":"valueOne","array key":["arrayValue","arrayValue",{"array item key":"arrayNestedValue"}],"nested key":{"nested item key":"nestedItemKey"}}'
+  );
+});
