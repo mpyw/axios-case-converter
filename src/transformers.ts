@@ -2,7 +2,7 @@ import { camelCase as camelCaseString } from "camel-case";
 import { snakeCase as snakeCaseString } from "snake-case";
 import { headerCase as headerCaseString } from "header-case";
 import { applyCaseOptions, preserveSpecificKeys } from "./decorators";
-import { isFormData, isTransformable } from "./util";
+import { isFormData, isTransformable, isURLSearchParams } from "./util";
 import {
   CaseFunction,
   CaseFunctions,
@@ -31,18 +31,33 @@ const transformObjectUsingCallbackRecursive = (
   }
 
   /* eslint-disable no-console */
-  if (isFormData(data) && !data.entries) {
+  // Check FormData/URLSearchParams compatibility
+  if (
+    (isFormData(data) || isURLSearchParams(data)) &&
+    (!data.entries || (overwrite && !data.delete))
+  ) {
+    const type = isFormData(data) ? "FormData" : "URLSearchParams";
     if (
       typeof navigator !== "undefined" &&
       navigator.product === "ReactNative"
     ) {
+      // You cannot transform FormData/URLSearchParams on React Native
       console.warn(
-        "Be careful that FormData cannot be transformed on React Native. If you intentionally implemented, ignore this kind of warning: https://facebook.github.io/react-native/docs/debugging.html"
+        `Be careful that ${type} cannot be transformed on React Native. If you intentionally implemented, ignore this kind of warning: https://facebook.github.io/react-native/docs/debugging.html`
       );
     } else {
-      console.warn(
-        "You must use polyfill of FormData.prototype.entries() on Internet Explorer or Safari: https://github.com/jimmywarting/FormData"
-      );
+      if (!data.entries) {
+        // You need to polyfill `entries` method
+        console.warn(
+          `You must use polyfill of ${type}.prototype.entries() on Internet Explorer or Safari: https://github.com/jimmywarting/FormData`
+        );
+      }
+      if (overwrite && !data.delete) {
+        // You need to polyfill `delete` method for overwriting
+        console.warn(
+          `You must use polyfill of ${type}.prototype.delete() on Internet Explorer or Safari: https://github.com/jimmywarting/FormData`
+        );
+      }
     }
     return data;
   }
