@@ -32,7 +32,10 @@ const transformObjectUsingCallbackRecursive = (
 
   /* eslint-disable no-console */
   if (isFormData(data) && !data.entries) {
-    if (navigator.product === "ReactNative") {
+    if (
+      typeof navigator !== "undefined" &&
+      navigator.product === "ReactNative"
+    ) {
       console.warn(
         "Be careful that FormData cannot be transformed on React Native. If you intentionally implemented, ignore this kind of warning: https://facebook.github.io/react-native/docs/debugging.html"
       );
