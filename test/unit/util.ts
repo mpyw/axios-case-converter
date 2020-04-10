@@ -1,8 +1,8 @@
 import {
-  isURLSearchParams,
   isFormData,
   isPlainObject,
   isTransformable,
+  isURLSearchParams,
 } from "../../src/util";
 
 beforeEach(async () => {
