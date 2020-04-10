@@ -65,25 +65,36 @@ const transformObjectUsingCallbackRecursive = (
 
   const prototype = Object.getPrototypeOf(data);
 
+  // Storage of new values.
+  // New instances are created when overwriting is disabled.
   const store: Transformable = overwrite
     ? data
     : !prototype
     ? Object.create(null)
     : new prototype.constructor();
 
-  const entries: [unknown, unknown][] | Iterable<[unknown, unknown]> =
-    overwrite && prototype?.entries
-      ? [...prototype?.entries?.call(data)]
-      : prototype?.entries
-      ? prototype?.entries?.call(data)
-      : Object.entries(data);
+  // FormData/URLSearchParams can accept duplicated keys,
+  // so we need to clean up all entries before overwriting.
+  let series:
+    | Iterable<[unknown, unknown]>
+    | IterableIterator<[unknown, unknown]>;
+  if (overwrite && (isFormData(data) || isURLSearchParams(data))) {
+    series = [...(prototype as FormData | URLSearchParams).entries.call(data)];
+    for (const [key] of series) {
+      data.delete(key as string);
+    }
+  } else if (isFormData(data) || isURLSearchParams(data)) {
+    series = (prototype as FormData | URLSearchParams).entries.call(data);
+  } else {
+    series = Object.entries(data);
+  }
 
-  for (const [key, value] of entries) {
+  for (const [key, value] of series) {
     if (prototype?.append) {
-      prototype.append.call(
+      (prototype as FormData | URLSearchParams).append.call(
         store,
-        typeof key === "string" ? fn(key) : key,
-        transformObjectUsingCallbackRecursive(value, fn, overwrite)
+        fn(key as string),
+        value as string & File
       );
     } else if (key !== "__proto__") {
       store[
