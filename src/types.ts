@@ -2,21 +2,20 @@ import { Options as NoCaseOptions } from "camel-case";
 import { AxiosInstance, AxiosRequestConfig, AxiosTransformer } from "axios";
 
 /** string transformers (change-case functions) */
-export interface Transformer {
+export interface CaseFunction {
   (input: string, options?: NoCaseOptions): string;
 }
-export type Transformers = {
-  snake?: Transformer;
-  camel?: Transformer;
-  header?: Transformer;
+export type CaseFunctionTypes = "snake" | "camel" | "header";
+export type CaseFunctions = {
+  [K in CaseFunctionTypes]: CaseFunction;
 };
 
 /** decorators for string transformers */
-export interface PreserveArrayBrackets {
-  (fn: Transformer): Transformer;
+export interface ApplyCaseOptions {
+  (fn: CaseFunction, options?: NoCaseOptions): CaseFunction;
 }
 export interface PreserveSpecificKeys {
-  (fn: Transformer, keys: string[] | PreservedKeysCondition): Transformer;
+  (fn: CaseFunction, keys: string[] | PreservedKeysCondition): CaseFunction;
 }
 
 /** objects which can be handled in object transformers */
@@ -30,56 +29,56 @@ export type Transformable = (unknown[] | object | FormData | URLSearchParams) &
 export interface PreservedKeysCondition {
   (input: string, options?: NoCaseOptions): boolean;
 }
-export type TransformOptions = {
+export type ObjectTransformerOptions = {
   overwrite?: boolean;
   preservedKeys?: string[] | PreservedKeysCondition;
+  caseOptions?: NoCaseOptions;
 };
-export interface TransformUsingCallback {
+export interface ObjectTransformer {
+  (data: unknown, options?: ObjectTransformerOptions): unknown;
+}
+export type ObjectTransformers = {
+  [K in CaseFunctionTypes]: ObjectTransformer;
+};
+export interface CreateObjectTransformer {
+  (fn: CaseFunction): ObjectTransformer;
+}
+export interface CreateObjectTransformerOf {
   (
-    data: unknown,
-    fn: Transformer,
-    options?: TransformOptions | boolean
-  ): unknown;
+    type: CaseFunctionTypes,
+    options?: Partial<CaseFunctions>
+  ): ObjectTransformer;
 }
-export interface Transform {
-  (
-    data: Parameters<TransformUsingCallback>[0],
-    options?: Parameters<TransformUsingCallback>[2]
-  ): unknown;
-}
-export interface CreateTransform {
-  (fn: Transformer): Transform;
-}
-export interface CreateTransformOf {
-  (type: keyof Transformers, options?: Transformers): Transform;
-}
-export interface CreateTransforms {
-  (options?: Transformers): Record<keyof Transformers, Transform>;
+export interface CreateObjectTransformers {
+  (options?: Partial<CaseFunctions>): ObjectTransformers;
 }
 
 /** converters for axios and their factories */
-export type ConverterOptions = Omit<TransformOptions, "overwrite"> & {
-  caseFunctions?: Transformers;
+export type AxiosCaseMiddlewareOptions = Omit<
+  ObjectTransformerOptions,
+  "overwrite"
+> & {
+  caseFunctions?: Partial<CaseFunctions>;
   ignoreHeaders?: boolean;
 };
 export interface AxiosInterceptor {
   (config: AxiosRequestConfig): AxiosRequestConfig;
 }
 export interface CreateAxiosInterceptor {
-  (options?: ConverterOptions): AxiosInterceptor;
+  (options?: AxiosCaseMiddlewareOptions): AxiosInterceptor;
 }
 export interface CreateAxiosTransformer {
-  (options?: ConverterOptions): AxiosTransformer;
+  (options?: AxiosCaseMiddlewareOptions): AxiosTransformer;
 }
 
 /** converter applier */
-export type ApplyConvertersOptions = ConverterOptions & {
-  converters?: {
-    snakeRequest?: AxiosTransformer;
-    camelResponse?: AxiosTransformer;
-    snakeParams?: AxiosInterceptor;
+export type ApplyCaseMiddlewareOptions = AxiosCaseMiddlewareOptions & {
+  caseMiddleware?: {
+    requestTransformer?: AxiosTransformer;
+    responseTransformer?: AxiosTransformer;
+    requestInterceptor?: AxiosInterceptor;
   };
 };
-export interface ApplyConverters {
-  (axios: AxiosInstance, options?: ApplyConvertersOptions): AxiosInstance;
+export interface ApplyCaseMiddleware {
+  (axios: AxiosInstance, options?: ApplyCaseMiddlewareOptions): AxiosInstance;
 }

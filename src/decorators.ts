@@ -1,21 +1,21 @@
 import {
-  PreserveArrayBrackets,
+  ApplyCaseOptions,
+  CaseFunction,
   PreservedKeysCondition,
   PreserveSpecificKeys,
-  Transformer,
 } from "./types";
 
-export const preserveArrayBrackets: PreserveArrayBrackets = (fn) => {
-  return (input, options?): ReturnType<ReturnType<PreserveArrayBrackets>> => {
+export const applyCaseOptions: ApplyCaseOptions = (fn, defaultOptions) => {
+  return (input, options?): ReturnType<ReturnType<ApplyCaseOptions>> => {
     return fn(input, {
-      stripRegexp: /[^A-Z0-9[\]]+/gi,
+      ...defaultOptions,
       ...options,
     });
   };
 };
 
 export const preserveSpecificKeys: PreserveSpecificKeys = (
-  fn: Transformer,
+  fn: CaseFunction,
   keys: string[] | PreservedKeysCondition
 ) => {
   const condition: PreservedKeysCondition =

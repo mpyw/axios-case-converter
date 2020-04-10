@@ -29,14 +29,14 @@ It is strongly recommended that you replace `latest` with a fixed version.
 
 ## Usage
 
-You can fully use _camelCase_.
+You can fully use _camelCase_ in your JavaScript codes.
 
 ```js
-import applyConverters from 'axios-case-converter';
+import applyCaseMiddleware from 'axios-case-converter';
 import axios from 'axios';
 
 (async () => {
-  const client = applyConverters(axios.create());
+  const client = applyCaseMiddleware(axios.create());
   const { data } = await client.post(
     'https://example.com/api/endpoint',
     {
@@ -55,7 +55,7 @@ import axios from 'axios';
 ## Options
 
 ```js
-const client = applyConverters(axios.create(), options);
+const client = applyCaseMiddleware(axios.create(), options);
 ```
 
 ### `preservedKeys`: `string[] | Function`
@@ -64,14 +64,14 @@ Disable transformation when the string matched or satisfied the condition.
 
 ```js
 const options = {
-  preservedKeys: ["preserve_this_key_1", "preserve_this_key_2"]
+  preservedKeys: ['preserve_this_key_1', 'preserve_this_key_2']
 };
 ```
 
 ```js
 const options = {
   preservedKeys: (input) => {
-    return ["preserve_this_key_1", "preserve_this_key_2"].includes(input);
+    return ['preserve_this_key_1', 'preserve_this_key_2'].includes(input);
   }
 };
 ```
@@ -95,19 +95,34 @@ const options = {
   caseFunctions: {
     camel: (input, options) => {
       return (input.charAt(0).toLowerCase() + input.slice(1)).replace(/[-_](.)/g, (match, group1) => group1.toUpperCase());
-    },
+    }
   }
 };
 ```
 
-### `converters`: `{ snakeParams?: Function, snakeRequest?: Function, camelResponse?: Function }`
+
+### `caseOptions`: `{ stripRegexp?: RegExp }`
+
+By default, **`{ stripRegexp: /[^A-Z0-9[\]]+/gi }`** is used as default `change-case` function options.
+This preserves `[]` chars in object keys.
+If you wish keeping original `change-case` behavior, override the options.
+
+```js
+const options = {
+  caseOptions: {
+    stripRegexp: /[^A-Z0-9]+/gi
+  }
+};
+```
+
+### `caseMiddleware`: `{ requestTransformer?: Function, responseTransformer?: Function, requestInterceptor?: Function }`
 
 Totally override `axios-case-converter` behaviors.
 
 ```js
 const options = {
-  converters: {
-    snakeParams: (config) => {
+  caseMiddleware: {
+    requestInterceptor: (config) => {
       // Disable query string transformation
       return config;
     }
@@ -115,7 +130,7 @@ const options = {
 };
 ```
 
-###### [Check the tests for more info](test/index.ts)
+###### [Check the tests for more info](test)
 
 ## Attention
 
