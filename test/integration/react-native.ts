@@ -1,7 +1,7 @@
 import { noCase } from "no-case";
 import { createObjectTransformer } from "../../src/transformers";
 
-let warn: typeof Console.prototype.warn;
+let warn: Console["warn"];
 
 beforeEach(() => {
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
