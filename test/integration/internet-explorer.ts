@@ -6,7 +6,7 @@ let warn: Console["warn"];
 beforeEach(() => {
   /* eslint-disable @typescript-eslint/ban-ts-ignore */
   // @ts-ignore
-  global.Blob = require("vblob").Blob;
+  global.Blob = require("blob-polyfill").Blob;
   // @ts-ignore
   global.navigator = { product: "Gecko" };
   /* eslint-enable @typescript-eslint/ban-ts-ignore */
