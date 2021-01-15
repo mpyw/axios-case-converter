@@ -8,7 +8,7 @@ import {
 beforeEach(async () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
-  global.Blob = require("vblob").Blob;
+  global.Blob = require("blob-polyfill").Blob;
   require("url-search-params-polyfill");
   require("formdata-polyfill");
 });
