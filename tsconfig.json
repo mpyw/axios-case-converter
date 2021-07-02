@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es5",
     "module": "commonjs",
+    "outDir": "lib",
     "lib": [
       "dom",
       "dom.iterable",
       "es2015.iterable"
     ],
-    "sourceRoot": "src/",
-    "declaration": true,
-    "sourceMap": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "importHelpers": true,
+    "downlevelIteration": true,
     "strict": true,
     "strictNullChecks": true,
     "noUnusedLocals": true,

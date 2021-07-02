@@ -1,11 +1,11 @@
-import { Options as NoCaseOptions } from "camel-case";
-import { AxiosInstance, AxiosRequestConfig, AxiosTransformer } from "axios";
+import { Options as NoCaseOptions } from 'camel-case';
+import { AxiosInstance, AxiosRequestConfig, AxiosTransformer } from 'axios';
 
 /** string transformers (change-case functions) */
 export interface CaseFunction {
   (input: string, options?: NoCaseOptions): string;
 }
-export type CaseFunctionTypes = "snake" | "camel" | "header";
+export type CaseFunctionTypes = 'snake' | 'camel' | 'header';
 export type CaseFunctions = {
   [K in CaseFunctionTypes]: CaseFunction;
 };
@@ -22,7 +22,12 @@ export interface PreserveSpecificKeys {
 export interface TransformableObject {
   [key: string]: unknown;
 }
-export type Transformable = (unknown[] | object | FormData | URLSearchParams) &
+export type Transformable = (
+  | unknown[]
+  | Record<string | number, unknown>
+  | FormData
+  | URLSearchParams
+) &
   TransformableObject;
 
 /** object transformers and their factories */
@@ -56,7 +61,7 @@ export interface CreateObjectTransformers {
 /** converters for axios and their factories */
 export type AxiosCaseMiddlewareOptions = Omit<
   ObjectTransformerOptions,
-  "overwrite"
+  'overwrite'
 > & {
   caseFunctions?: Partial<CaseFunctions>;
   ignoreHeaders?: boolean;

@@ -1,7 +1,7 @@
 # axios-case-converter
 
 [![npm version](https://badge.fury.io/js/axios-case-converter.svg)](https://badge.fury.io/js/axios-case-converter)
-[![Build Status](https://travis-ci.com/mpyw/axios-case-converter.svg?branch=master)](https://travis-ci.com/mpyw/axios-case-converter)
+[![Build Status](https://github.com/mpyw/axios-case-converter/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/mpyw/axios-case-converter/actions)
 [![Coverage Status](https://coveralls.io/repos/github/mpyw/axios-case-converter/badge.svg?branch=master)](https://coveralls.io/github/mpyw/axios-case-converter?branch=master)
 
 Axios transformer/interceptor that converts _snake_case/camelCase_
@@ -134,9 +134,15 @@ const options = {
 
 ## Attention
 
+### `Object` compatibility
+
+If you run on **Internet Explorer**, you need polyfill for `Object.prorotypte.entries()`.
+
+- [zloirock/core-js: Standard Library](https://github.com/zloirock/core-js)
+
 ### `FormData` compatibility
 
-If you use `FormData` on **Internet Explorer** or **Safari**, you need polyfill of `FormData.prototype.entries()`.
+If you use `FormData` on **Internet Explorer**, you need polyfill of `FormData.prototype.entries()`.
 
 - [jimmywarting/FormData: HTML5 `FormData` polyfill for Browsers.](https://github.com/jimmywarting/FormData)
 

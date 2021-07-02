@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "outDir": "typings",
+    "downlevelIteration": false,
+    "declaration": true,
+    "emitDeclarationOnly": true
+  },
+}
