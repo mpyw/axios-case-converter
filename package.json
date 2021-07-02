@@ -1,6 +1,6 @@
 {
   "name": "axios-case-converter",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "typings/index.d.ts",
