@@ -6,8 +6,12 @@
   "types": "typings/index.d.ts",
   "scripts": {
     "check": "tsc --noEmit",
-    "lint": "eslint {src,test}/**/*.ts",
-    "lint:fix": "eslint {src,test}/**/*.ts --fix",
+    "lint:eslint": "eslint {src,test}/**/*.ts *.config.js",
+    "lint:prettier": "prettier ./src ./test *.config.js --list-different",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "fix:eslint": "eslint {src,test}/**/*.ts *.config.js",
+    "fix:prettier": "prettier ./src ./test *.config.js --write",
+    "fix": "npm run fix:eslint && npm run fix:prettier",
     "build:cjs": "BABEL_ENV=cjs babel src --out-dir lib --extensions .ts",
     "build:es": "BABEL_ENV=es babel src --out-dir es --extensions .ts",
     "build:umd": "BABEL_ENV=es NODE_ENV=development rollup -c",
@@ -15,7 +19,11 @@
     "build:typings": "tsc --outDir typings/ --emitDeclarationOnly",
     "build": "run-p build:**",
     "test": "jest",
-    "prepublishOnly": "git diff --no-ext-diff --quiet --exit-code src .gitignore package.json README.md LICENSE || (echo \"Please commit changes!\" && false) && npm test && npm run build"
+    "test:coverage": "npm run test:php && npm run test:ts:coverage",
+    "test:ts": "jest",
+    "test:ts:coverage": "jest --coverage",
+    "test:php": "php test/index.php",
+    "prepublishOnly": "git diff --no-ext-diff --quiet --exit-code src .gitignore package.json README.md LICENSE || (echo \"Please commit changes!\" && false) && npm test && rm -rf lib es dist typings && npm run build"
   },
   "description": "Axios transformer/interceptor that converts snake_case/camelCase",
   "repository": {
