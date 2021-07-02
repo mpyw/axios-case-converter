@@ -1,8 +1,8 @@
-import { camelCase as camelCaseString } from "camel-case";
-import { snakeCase as snakeCaseString } from "snake-case";
-import { headerCase as headerCaseString } from "header-case";
-import { applyCaseOptions, preserveSpecificKeys } from "./decorators";
-import { isFormData, isTransformable, isURLSearchParams } from "./util";
+import { camelCase as camelCaseString } from 'camel-case';
+import { snakeCase as snakeCaseString } from 'snake-case';
+import { headerCase as headerCaseString } from 'header-case';
+import { applyCaseOptions, preserveSpecificKeys } from './decorators';
+import { isFormData, isTransformable, isURLSearchParams } from './util';
 import {
   CaseFunction,
   CaseFunctions,
@@ -13,7 +13,7 @@ import {
   ObjectTransformerOptions,
   ObjectTransformers,
   Transformable,
-} from "./types";
+} from './types';
 
 const caseFunctions: CaseFunctions = {
   snake: snakeCaseString,
@@ -24,7 +24,7 @@ const caseFunctions: CaseFunctions = {
 const transformObjectUsingCallbackRecursive = (
   data: unknown,
   fn: CaseFunction,
-  overwrite: ObjectTransformerOptions["overwrite"]
+  overwrite: ObjectTransformerOptions['overwrite']
 ): unknown => {
   if (!isTransformable(data)) {
     return data;
@@ -36,13 +36,13 @@ const transformObjectUsingCallbackRecursive = (
     (isFormData(data) || isURLSearchParams(data)) &&
     (!data.entries || (overwrite && !data.delete))
   ) {
-    const type = isFormData(data) ? "FormData" : "URLSearchParams";
+    const type = isFormData(data) ? 'FormData' : 'URLSearchParams';
     const polyfill = isFormData(data)
-      ? "https://github.com/jimmywarting/FormData"
-      : "https://github.com/jerrybendy/url-search-params-polyfill";
+      ? 'https://github.com/jimmywarting/FormData'
+      : 'https://github.com/jerrybendy/url-search-params-polyfill';
     if (
-      typeof navigator !== "undefined" &&
-      navigator.product === "ReactNative"
+      typeof navigator !== 'undefined' &&
+      navigator.product === 'ReactNative'
     ) {
       // You cannot transform FormData/URLSearchParams on React Native
       console.warn(
@@ -104,10 +104,9 @@ const transformObjectUsingCallbackRecursive = (
   for (const [key, value] of series) {
     if (isFormData(store) || isURLSearchParams(store)) {
       store.append(fn(key as string), value as string & File);
-    } else if (key !== "__proto__") {
-      store[
-        fn(typeof key === "string" ? key : `${key}`)
-      ] = transformObjectUsingCallbackRecursive(value, fn, overwrite);
+    } else if (key !== '__proto__') {
+      store[fn(typeof key === 'string' ? key : `${key}`)] =
+        transformObjectUsingCallbackRecursive(value, fn, overwrite);
     }
   }
   return store;

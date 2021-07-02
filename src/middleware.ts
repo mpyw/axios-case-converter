@@ -1,11 +1,11 @@
-import { createObjectTransformers } from "./transformers";
-import { isPlainObject } from "./util";
+import { createObjectTransformers } from './transformers';
+import { isPlainObject } from './util';
 import {
   ApplyCaseMiddleware,
   CreateAxiosInterceptor,
   CreateAxiosTransformer,
   TransformableObject,
-} from "./types";
+} from './types';
 
 export const createSnakeParamsInterceptor: CreateAxiosInterceptor = (
   options?
@@ -30,7 +30,7 @@ export const createSnakeRequestTransformer: CreateAxiosTransformer = (
       for (const [key, value] of Object.entries(headers)) {
         header(value, { overwrite: true, ...options });
         if (
-          !["common", "delete", "get", "head", "post", "put", "patch"].includes(
+          !['common', 'delete', 'get', 'head', 'post', 'put', 'patch'].includes(
             key
           )
         ) {

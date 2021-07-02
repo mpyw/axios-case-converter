@@ -3,7 +3,7 @@ import {
   CaseFunction,
   PreservedKeysCondition,
   PreserveSpecificKeys,
-} from "./types";
+} from './types';
 
 export const applyCaseOptions: ApplyCaseOptions = (fn, defaultOptions) => {
   return (input, options?): ReturnType<ReturnType<ApplyCaseOptions>> => {
@@ -19,7 +19,7 @@ export const preserveSpecificKeys: PreserveSpecificKeys = (
   keys: string[] | PreservedKeysCondition
 ) => {
   const condition: PreservedKeysCondition =
-    typeof keys === "function"
+    typeof keys === 'function'
       ? keys
       : (input): boolean => keys.includes(input);
 
