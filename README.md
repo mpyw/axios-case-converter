@@ -134,6 +134,12 @@ const options = {
 
 ## Attention
 
+### `Object` compatibility
+
+If you run on **Internet Explorer**, you need polyfill for `Object.prorotypte.entries()`.
+
+- [zloirock/core-js: Standard Library](https://github.com/zloirock/core-js)
+
 ### `FormData` compatibility
 
 If you use `FormData` on **Internet Explorer**, you need polyfill of `FormData.prototype.entries()`.
