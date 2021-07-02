@@ -136,7 +136,7 @@ const options = {
 
 ### `FormData` compatibility
 
-If you use `FormData` on **Internet Explorer** or **Safari**, you need polyfill of `FormData.prototype.entries()`.
+If you use `FormData` on **Internet Explorer**, you need polyfill of `FormData.prototype.entries()`.
 
 - [jimmywarting/FormData: HTML5 `FormData` polyfill for Browsers.](https://github.com/jimmywarting/FormData)
 
