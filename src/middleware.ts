@@ -3,7 +3,8 @@ import { isPlainObject } from './util';
 import {
   ApplyCaseMiddleware,
   CreateAxiosInterceptor,
-  CreateAxiosTransformer,
+  CreateAxiosRequestTransformer,
+  CreateAxiosResponseTransformer,
   TransformableObject,
 } from './types';
 
@@ -18,14 +19,14 @@ export const createSnakeParamsInterceptor: CreateAxiosInterceptor = (
     return config;
   };
 };
-export const createSnakeRequestTransformer: CreateAxiosTransformer = (
+export const createSnakeRequestTransformer: CreateAxiosRequestTransformer = (
   options?
 ) => {
   const { snake, header } = createObjectTransformers(options?.caseFunctions);
   return (
     data: unknown,
     headers?: unknown
-  ): ReturnType<ReturnType<CreateAxiosTransformer>> => {
+  ): ReturnType<ReturnType<CreateAxiosRequestTransformer>> => {
     if (!options?.ignoreHeaders && isPlainObject(headers)) {
       for (const [key, value] of Object.entries(headers)) {
         header(value, { overwrite: true, ...options });
@@ -46,14 +47,14 @@ export const createSnakeRequestTransformer: CreateAxiosTransformer = (
     return snake(data, options);
   };
 };
-export const createCamelResponseTransformer: CreateAxiosTransformer = (
+export const createCamelResponseTransformer: CreateAxiosResponseTransformer = (
   options?
 ) => {
   const { camel } = createObjectTransformers(options?.caseFunctions);
   return (
     data: unknown,
     headers?: unknown
-  ): ReturnType<ReturnType<CreateAxiosTransformer>> => {
+  ): ReturnType<ReturnType<CreateAxiosResponseTransformer>> => {
     if (!options?.ignoreHeaders) {
       camel(headers, { overwrite: true, ...options });
     }

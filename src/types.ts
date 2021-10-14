@@ -1,5 +1,10 @@
 import { Options as NoCaseOptions } from 'camel-case';
-import { AxiosInstance, AxiosRequestConfig, AxiosTransformer } from 'axios';
+import {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosRequestTransformer,
+  AxiosResponseTransformer,
+} from 'axios';
 
 /** string transformers (change-case functions) */
 export interface CaseFunction {
@@ -72,15 +77,18 @@ export interface AxiosInterceptor {
 export interface CreateAxiosInterceptor {
   (options?: AxiosCaseMiddlewareOptions): AxiosInterceptor;
 }
-export interface CreateAxiosTransformer {
-  (options?: AxiosCaseMiddlewareOptions): AxiosTransformer;
+export interface CreateAxiosRequestTransformer {
+  (options?: AxiosCaseMiddlewareOptions): AxiosResponseTransformer;
+}
+export interface CreateAxiosResponseTransformer {
+  (options?: AxiosCaseMiddlewareOptions): AxiosResponseTransformer;
 }
 
 /** converter applier */
 export type ApplyCaseMiddlewareOptions = AxiosCaseMiddlewareOptions & {
   caseMiddleware?: {
-    requestTransformer?: AxiosTransformer;
-    responseTransformer?: AxiosTransformer;
+    requestTransformer?: AxiosRequestTransformer;
+    responseTransformer?: AxiosResponseTransformer;
     requestInterceptor?: AxiosInterceptor;
   };
 };
