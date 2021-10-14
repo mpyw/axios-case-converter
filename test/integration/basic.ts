@@ -65,8 +65,8 @@ const mock = new MockAdapter(client);
 test('it should be converted on success', (done) => {
   mock.onPost('/success').reply((config) => {
     expect(config.method).toBe('post');
-    expect(config.headers['X-Requested-With']).toBe('XMLHttpRequest');
-    expect(config.headers.thisCamelShouldBePreserved).toBe('preserved');
+    expect(config.headers?.['X-Requested-With']).toBe('XMLHttpRequest');
+    expect(config.headers?.thisCamelShouldBePreserved).toBe('preserved');
     expect(config.params.user_id).toBe(1);
     expect(config.params.screen_name).toBe('yay');
     expect(config.params.thisCamelShouldBePreserved).toBe('preserved');
@@ -108,8 +108,8 @@ test('it should be converted on success', (done) => {
 test('it should be converted on failure', (done) => {
   mock.onPost('/failure').reply((config) => {
     expect(config.method).toBe('post');
-    expect(config.headers['X-Requested-With']).toBe('XMLHttpRequest');
-    expect(config.headers.thisCamelShouldBePreserved).toBe('preserved');
+    expect(config.headers?.['X-Requested-With']).toBe('XMLHttpRequest');
+    expect(config.headers?.thisCamelShouldBePreserved).toBe('preserved');
     expect(config.params.user_id).toBe(1);
     expect(config.params.screen_name).toBe('yay');
     expect(config.params.thisCamelShouldBePreserved).toBe('preserved');
