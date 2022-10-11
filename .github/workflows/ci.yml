@@ -8,7 +8,13 @@ jobs:
 
     strategy:
       matrix:
-        node: [16, 14, 12]
+        node: [18, 16]
+        axios:
+          - '^0'
+          # TODO: axios v1 are partially supported, and some tests are failing on v1.
+          #       This matrix case will be enabled once the issue is resolved.
+          #       see https://github.com/mpyw/axios-case-converter/issues/47 .
+          # - '^1'
 
     steps:
       - uses: actions/checkout@v2
@@ -20,6 +26,9 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: 'npm'
+
+      - name: Install fixed axios
+        run: npm install -D 'axios@${{ matrix.axios }}'
 
       - name: Lint
         run: npm run lint

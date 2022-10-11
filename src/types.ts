@@ -78,7 +78,7 @@ export interface CreateAxiosInterceptor {
   (options?: AxiosCaseMiddlewareOptions): AxiosInterceptor;
 }
 export interface CreateAxiosRequestTransformer {
-  (options?: AxiosCaseMiddlewareOptions): AxiosResponseTransformer;
+  (options?: AxiosCaseMiddlewareOptions): AxiosRequestTransformer;
 }
 export interface CreateAxiosResponseTransformer {
   (options?: AxiosCaseMiddlewareOptions): AxiosResponseTransformer;
