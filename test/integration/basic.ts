@@ -94,7 +94,7 @@ test('it should be converted on success', (done) => {
     })
     .then((response) => {
       expect(JSON.stringify(response.data)).toBe(JSON.stringify(camelData));
-      expect(response.headers.contentType).toBe('application/json');
+      expect(response.headers.contentType || response.headers['Content-Type']).toBe('application/json');
       expect(response.headers['THIS-HEADER-SHOULD-BE-PRESERVED']).toBe(
         'preserved'
       );
@@ -143,7 +143,7 @@ test('it should be converted on failure', (done) => {
         expect(JSON.stringify(error.response.data)).toBe(
           JSON.stringify(camelData)
         );
-        expect(error.response.headers.contentType).toBe('application/json');
+        expect(error.response.headers.contentType || error.response.headers['Content-Type']).toBe('application/json');
         expect(error.response.headers['THIS-HEADER-SHOULD-BE-PRESERVED']).toBe(
           'preserved'
         );

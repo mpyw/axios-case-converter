@@ -49,14 +49,16 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.19.4",
     "@rollup/plugin-node-resolve": "^13.0.5",
     "@rollup/plugin-typescript": "^8.2.5",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.9",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
-    "axios": "^0.23.0",
+    "axios": "^1.1.2",
     "axios-mock-adapter": "^1.20.0",
+    "babel-jest": "^27.5.1",
     "blob-polyfill": "^5.0.20210201",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^8.3.0",
@@ -71,6 +73,6 @@
     "url-search-params-polyfill": "^8.1.1"
   },
   "peerDependencies": {
-    "axios": ">=0.23.0 <1.0.0"
+    "axios": ">=0.23.0 <2.0.0"
   }
 }
