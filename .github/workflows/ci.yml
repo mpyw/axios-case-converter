@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [16, 14, 12]
+        node: [18, 16]
         axios: ['^0', '^1']
 
     steps:
