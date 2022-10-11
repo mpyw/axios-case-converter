@@ -33,13 +33,12 @@ jobs:
       # Dirty hacks for https://github.com/mpyw/axios-case-converter/issues/47
       - name: Disable dirty hacks for old version
         if: ${{ matrix.axios == '^0' }}
-        uses: "finnp/create-file-action@master"
-        env:
-          FILE_NAME: test/axios-headers-dirty-hacks.ts
-          FILE_DATA: |
-            export function newAxiosHeadersFrom(arg: Record<string, string | string[] | number | boolean | null>): Record<string, string | string[] | number | boolean | null> {
-              return arg
-            }
+        run: |
+          cat <<EOD > test/axios-headers-dirty-hacks.ts
+          export function newAxiosHeadersFrom(arg: Record<string, string | string[] | number | boolean | null>): Record<string, string | string[] | number | boolean | null> {
+            return arg
+          }
+          EOD
 
       - name: Test
         run: npm run test:coverage
