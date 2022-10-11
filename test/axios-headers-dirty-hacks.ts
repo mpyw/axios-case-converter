@@ -1,5 +1,6 @@
 import axios, { AxiosHeaders } from 'axios';
 
+// Dirty hacks for https://github.com/mpyw/axios-case-converter/issues/47
 export function newAxiosHeadersFrom(
   thing?: Record<string, string | string[] | number | boolean | null> | string
 ): AxiosHeaders {
