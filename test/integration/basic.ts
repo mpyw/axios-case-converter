@@ -1,6 +1,7 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import applyCaseMiddleware from '../../src';
+import { newAxiosHeadersFrom } from '../axios-headers-dirty-hacks';
 
 const snakeData = {
   user_id: 1,
@@ -74,10 +75,10 @@ test('it should be converted on success', (done) => {
     return [
       200,
       snakeData,
-      {
+      newAxiosHeadersFrom({
         'Content-Type': 'application/json',
         'THIS-HEADER-SHOULD-BE-PRESERVED': 'preserved',
-      },
+      }),
     ];
   });
   client
@@ -117,10 +118,10 @@ test('it should be converted on failure', (done) => {
     return [
       400,
       snakeData,
-      {
+      newAxiosHeadersFrom({
         'Content-Type': 'application/json',
         'THIS-HEADER-SHOULD-BE-PRESERVED': 'preserved',
-      },
+      }),
     ];
   });
   client
