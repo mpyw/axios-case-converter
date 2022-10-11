@@ -9,6 +9,7 @@ jobs:
     strategy:
       matrix:
         node: [16, 14, 12]
+        axios: ['^0', '^1']
 
     steps:
       - uses: actions/checkout@v2
@@ -20,6 +21,9 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: 'npm'
+
+      - name: Install fixed axios
+        run: npm install -D 'axios@${{ matrix.axios }}'
 
       - name: Lint
         run: npm run lint
