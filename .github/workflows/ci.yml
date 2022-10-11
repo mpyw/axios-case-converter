@@ -11,10 +11,7 @@ jobs:
         node: [18, 16]
         axios:
           - '^0'
-          # TODO: axios v1 are partially supported, and some tests are failing on v1.
-          #       This matrix case will be enabled once the issue is resolved.
-          #       see https://github.com/mpyw/axios-case-converter/issues/47 .
-          # - '^1'
+          - '^1'
 
     steps:
       - uses: actions/checkout@v2
@@ -32,6 +29,16 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      # Dirty hacks for https://github.com/mpyw/axios-case-converter/issues/47
+      - name: Disable dirty hacks for old version
+        if: ${{ matrix.axios == '^0' }}
+        run: |
+          cat <<EOD > test/axios-headers-dirty-hacks.ts
+          export function newAxiosHeadersFrom(arg: Record<string, string | string[] | number | boolean | null>): Record<string, string | string[] | number | boolean | null> {
+            return arg
+          }
+          EOD
 
       - name: Test
         run: npm run test:coverage

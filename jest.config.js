@@ -3,7 +3,7 @@ module.exports = {
   testEnvironment: 'node',
   rootDir: '.',
   roots: ['<rootDir>/src/', '<rootDir>/test/'],
-  testMatch: ['<rootDir>/test/**/*.ts'],
+  testMatch: ['<rootDir>/test/*/**/*.ts'],
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   resolver: './jest.resolver.js',
 };
