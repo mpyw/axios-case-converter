@@ -5,8 +5,5 @@ module.exports = {
   roots: ['<rootDir>/src/', '<rootDir>/test/'],
   testMatch: ['<rootDir>/test/**/*.ts'],
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
-  transform: {
-    '^.+\\.js$': 'babel-jest',
-  },
-  transformIgnorePatterns: ['<rootdir>/node_modules/(?!axios)'],
+  resolver: './jest.resolver.js',
 };
