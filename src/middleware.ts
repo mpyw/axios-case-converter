@@ -29,7 +29,7 @@ export const createSnakeRequestTransformer: CreateAxiosRequestTransformer = (
     data: unknown,
     headers?: unknown
   ): ReturnType<ReturnType<CreateAxiosRequestTransformer>> => {
-    overwriteHeaders(headers, header, options, [
+    overwriteHeadersOrNoop(headers, header, options, [
       'common',
       'delete',
       'get',
@@ -49,11 +49,11 @@ export const createCamelResponseTransformer: CreateAxiosResponseTransformer = (
     data: unknown,
     headers?: unknown
   ): ReturnType<ReturnType<CreateAxiosResponseTransformer>> => {
-    overwriteHeaders(headers, camel, options);
+    overwriteHeadersOrNoop(headers, camel, options);
     return camel(data, options);
   };
 };
-const overwriteHeaders = (
+const overwriteHeadersOrNoop = (
   headers: unknown,
   fn: ObjectTransformer,
   options?: AxiosCaseMiddlewareOptions,
