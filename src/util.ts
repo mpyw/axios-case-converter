@@ -1,4 +1,3 @@
-import { AxiosHeaders } from 'axios';
 import { Transformable, TransformableObject } from './types';
 
 export const isURLSearchParams = (value: unknown): value is URLSearchParams => {
@@ -36,3 +35,7 @@ export const isAxiosHeaders = (value: unknown): value is AxiosHeaders => {
   }
   return Object.getPrototypeOf(value)?.constructor?.name === 'AxiosHeaders';
 };
+interface AxiosHeaders {
+  set(headerName: string, value: string, rewrite: boolean): unknown;
+  delete(header: string): boolean;
+}
