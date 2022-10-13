@@ -46,6 +46,13 @@ test('it should correctly handle plain objects', () => {
   expect(isTransformable({})).toBe(true);
 });
 
+test('it should correctly handle plain objects without prototype', () => {
+  expect(isURLSearchParams(Object.create(null))).toBe(false);
+  expect(isFormData(Object.create(null))).toBe(false);
+  expect(isPlainObject(Object.create(null))).toBe(true);
+  expect(isTransformable(Object.create(null))).toBe(true);
+});
+
 test('it should correctly handle class instances', () => {
   expect(isURLSearchParams(new (class {})())).toBe(false);
   expect(isFormData(new (class {})())).toBe(false);
