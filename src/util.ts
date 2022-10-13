@@ -11,11 +11,11 @@ export const isFormData = (value: unknown): value is FormData => {
 };
 
 export const isPlainObject = (value: unknown): value is TransformableObject => {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    Object.prototype.toString.call(value) === '[object Object]'
-  );
+  if (value === null) {
+    return false;
+  }
+  const proto = Object.getPrototypeOf(value);
+  return proto === null || proto === Object.prototype;
 };
 
 export const isTransformable = (value: unknown): value is Transformable => {
@@ -26,3 +26,16 @@ export const isTransformable = (value: unknown): value is Transformable => {
     isURLSearchParams(value)
   );
 };
+
+// Dirty hack for unexported AxiosHeaders.
+// Don't handle it as Transformable to reduce the scope of the impact.
+export const isAxiosHeaders = (value: unknown): value is AxiosHeaders => {
+  if (value === null) {
+    return false;
+  }
+  return Object.getPrototypeOf(value)?.constructor?.name === 'AxiosHeaders';
+};
+interface AxiosHeaders {
+  set(headerName: string, value: string, rewrite: boolean): unknown;
+  delete(header: string): boolean;
+}
