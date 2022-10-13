@@ -1,3 +1,4 @@
+import { AxiosHeaders } from 'axios';
 import { Transformable, TransformableObject } from './types';
 
 export const isURLSearchParams = (value: unknown): value is URLSearchParams => {
@@ -25,4 +26,13 @@ export const isTransformable = (value: unknown): value is Transformable => {
     isFormData(value) ||
     isURLSearchParams(value)
   );
+};
+
+// Dirty hack for unexported AxiosHeaders.
+// Don't handle it as Transformable to reduce the scope of the impact.
+export const isAxiosHeaders = (value: unknown): value is AxiosHeaders => {
+  if (value === null) {
+    return false;
+  }
+  return Object.getPrototypeOf(value)?.constructor?.name === 'AxiosHeaders';
 };

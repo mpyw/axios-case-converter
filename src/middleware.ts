@@ -1,10 +1,12 @@
 import { createObjectTransformers } from './transformers';
-import { isPlainObject } from './util';
+import { isAxiosHeaders, isPlainObject } from './util';
 import {
   ApplyCaseMiddleware,
+  AxiosCaseMiddlewareOptions,
   CreateAxiosInterceptor,
   CreateAxiosRequestTransformer,
   CreateAxiosResponseTransformer,
+  ObjectTransformer,
   TransformableObject,
 } from './types';
 
@@ -27,23 +29,15 @@ export const createSnakeRequestTransformer: CreateAxiosRequestTransformer = (
     data: unknown,
     headers?: unknown
   ): ReturnType<ReturnType<CreateAxiosRequestTransformer>> => {
-    if (!options?.ignoreHeaders && isPlainObject(headers)) {
-      for (const [key, value] of Object.entries(headers)) {
-        header(value, { overwrite: true, ...options });
-        if (
-          !['common', 'delete', 'get', 'head', 'post', 'put', 'patch'].includes(
-            key
-          )
-        ) {
-          delete headers[key];
-          headers[
-            Object.keys(
-              header({ [key]: null }, options) as TransformableObject
-            )[0]
-          ] = value;
-        }
-      }
-    }
+    overwriteHeaders(headers, header, options, [
+      'common',
+      'delete',
+      'get',
+      'head',
+      'post',
+      'put',
+      'patch',
+    ]);
     return snake(data, options);
   };
 };
@@ -55,11 +49,41 @@ export const createCamelResponseTransformer: CreateAxiosResponseTransformer = (
     data: unknown,
     headers?: unknown
   ): ReturnType<ReturnType<CreateAxiosResponseTransformer>> => {
-    if (!options?.ignoreHeaders) {
-      camel(headers, { overwrite: true, ...options });
-    }
+    overwriteHeaders(headers, camel, options);
     return camel(data, options);
   };
+};
+const overwriteHeaders = (
+  headers: unknown,
+  fn: ObjectTransformer,
+  options?: AxiosCaseMiddlewareOptions,
+  excludedKeys?: string[]
+): void => {
+  if (
+    options?.ignoreHeaders ||
+    (!isPlainObject(headers) && !isAxiosHeaders(headers))
+  ) {
+    return;
+  }
+  for (const [key, value] of Object.entries(headers)) {
+    fn(value, { overwrite: true, ...options });
+    if ((excludedKeys || []).includes(key)) {
+      continue;
+    }
+    if (isAxiosHeaders(headers)) {
+      headers.delete(key);
+      headers.set(
+        Object.keys(fn({ [key]: null }, options) as TransformableObject)[0],
+        value,
+        true
+      );
+    } else {
+      delete headers[key];
+      headers[
+        Object.keys(fn({ [key]: null }, options) as TransformableObject)[0]
+      ] = value;
+    }
+  }
 };
 
 export const applyCaseMiddleware: ApplyCaseMiddleware = (axios, options?) => {
