@@ -46,6 +46,13 @@ test('it should correctly handle plain objects', () => {
   expect(isTransformable({})).toBe(true);
 });
 
+test('it should correctly handle class instances', () => {
+  expect(isURLSearchParams(new (class {})())).toBe(false);
+  expect(isFormData(new (class {})())).toBe(false);
+  expect(isPlainObject(new (class {})())).toBe(false);
+  expect(isTransformable(new (class {})())).toBe(false);
+});
+
 test('it should correctly handle arrays', () => {
   expect(isURLSearchParams([])).toBe(false);
   expect(isFormData([])).toBe(false);

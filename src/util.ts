@@ -11,11 +11,11 @@ export const isFormData = (value: unknown): value is FormData => {
 };
 
 export const isPlainObject = (value: unknown): value is TransformableObject => {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    Object.prototype.toString.call(value) === '[object Object]'
-  );
+  if (value === null) {
+    return false;
+  }
+  const proto = Object.getPrototypeOf(value);
+  return proto === null || proto === Object.prototype;
 };
 
 export const isTransformable = (value: unknown): value is Transformable => {
