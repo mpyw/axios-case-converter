@@ -35,8 +35,8 @@ jobs:
         if: ${{ matrix.axios == '^0' }}
         run: |
           cat <<EOD > test/axios-headers-dirty-hacks.ts
-          export function newAxiosHeadersFrom(arg: Record<string, string | string[] | number | boolean | null>): Record<string, string | string[] | number | boolean | null> {
-            return arg
+          export function newAxiosHeadersFrom(thing?: Record<string, string | string[] | number | boolean | null>): Record<string, string | string[] | number | boolean | null> {
+            return thing ?? {}
           }
           EOD
 

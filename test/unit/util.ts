@@ -1,9 +1,12 @@
+import axios from 'axios';
 import {
+  isAxiosHeaders,
   isFormData,
   isPlainObject,
   isTransformable,
   isURLSearchParams,
 } from '../../src/util';
+import { newAxiosHeadersFrom } from '../axios-headers-dirty-hacks';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
@@ -30,6 +33,7 @@ test('it should correctly handle URLSearchParams', () => {
   expect(isFormData(new URLSearchParams())).toBe(false);
   expect(isPlainObject(new URLSearchParams())).toBe(false);
   expect(isTransformable(new URLSearchParams())).toBe(true);
+  expect(isAxiosHeaders(new URLSearchParams())).toBe(false);
 });
 
 test('it should correctly handle FormData', () => {
@@ -37,6 +41,7 @@ test('it should correctly handle FormData', () => {
   expect(isFormData(new FormData())).toBe(true);
   expect(isPlainObject(new FormData())).toBe(false);
   expect(isTransformable(new FormData())).toBe(true);
+  expect(isAxiosHeaders(new FormData())).toBe(false);
 });
 
 test('it should correctly handle plain objects', () => {
@@ -44,6 +49,7 @@ test('it should correctly handle plain objects', () => {
   expect(isFormData({})).toBe(false);
   expect(isPlainObject({})).toBe(true);
   expect(isTransformable({})).toBe(true);
+  expect(isAxiosHeaders({})).toBe(false);
 });
 
 test('it should correctly handle plain objects without prototype', () => {
@@ -51,6 +57,7 @@ test('it should correctly handle plain objects without prototype', () => {
   expect(isFormData(Object.create(null))).toBe(false);
   expect(isPlainObject(Object.create(null))).toBe(true);
   expect(isTransformable(Object.create(null))).toBe(true);
+  expect(isAxiosHeaders(Object.create(null))).toBe(false);
 });
 
 test('it should correctly handle class instances', () => {
@@ -58,18 +65,35 @@ test('it should correctly handle class instances', () => {
   expect(isFormData(new (class {})())).toBe(false);
   expect(isPlainObject(new (class {})())).toBe(false);
   expect(isTransformable(new (class {})())).toBe(false);
+  expect(isAxiosHeaders(new (class {})())).toBe(false);
 });
 
-test('it should correctly handle arrays', () => {
-  expect(isURLSearchParams([])).toBe(false);
-  expect(isFormData([])).toBe(false);
-  expect(isPlainObject([])).toBe(false);
-  expect(isTransformable([])).toBe(true);
-});
+if (axios.VERSION < '1') {
+  test.skip('it should correctly handle AxiosHeaders', () => {
+    //
+  });
+} else {
+  test('it should correctly handle AxiosHeaders', () => {
+    expect(isURLSearchParams(newAxiosHeadersFrom())).toBe(false);
+    expect(isFormData(newAxiosHeadersFrom())).toBe(false);
+    expect(isPlainObject(newAxiosHeadersFrom())).toBe(false);
+    expect(isTransformable(newAxiosHeadersFrom())).toBe(false);
+    expect(isAxiosHeaders(newAxiosHeadersFrom())).toBe(true);
+  });
+}
 
 test('it should correctly handle string', () => {
   expect(isURLSearchParams('foo')).toBe(false);
   expect(isFormData('foo')).toBe(false);
   expect(isPlainObject('foo')).toBe(false);
   expect(isTransformable('foo')).toBe(false);
+  expect(isAxiosHeaders('foo')).toBe(false);
+});
+
+test('it should correctly handle null', () => {
+  expect(isURLSearchParams(null)).toBe(false);
+  expect(isFormData(null)).toBe(false);
+  expect(isPlainObject(null)).toBe(false);
+  expect(isTransformable(null)).toBe(false);
+  expect(isAxiosHeaders(null)).toBe(false);
 });
