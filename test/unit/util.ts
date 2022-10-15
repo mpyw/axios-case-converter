@@ -97,3 +97,11 @@ test('it should correctly handle null', () => {
   expect(isTransformable(null)).toBe(false);
   expect(isAxiosHeaders(null)).toBe(false);
 });
+
+test('it should correctly handle undefined', () => {
+  expect(isURLSearchParams(undefined)).toBe(false);
+  expect(isFormData(undefined)).toBe(false);
+  expect(isPlainObject(undefined)).toBe(false);
+  expect(isTransformable(undefined)).toBe(false);
+  expect(isAxiosHeaders(undefined)).toBe(false);
+});
