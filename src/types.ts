@@ -4,6 +4,8 @@ import {
   AxiosRequestConfig,
   AxiosRequestTransformer,
   AxiosResponseTransformer,
+  AxiosRequestHeaders,
+  AxiosInterceptorManager,
 } from 'axios';
 
 /** string transformers (change-case functions) */
@@ -71,11 +73,19 @@ export type AxiosCaseMiddlewareOptions = Omit<
   caseFunctions?: Partial<CaseFunctions>;
   ignoreHeaders?: boolean;
 };
-export interface AxiosInterceptor {
-  (config: AxiosRequestConfig): AxiosRequestConfig;
+export type AxiosInterceptor<V> = NonNullable<
+  Parameters<AxiosInterceptorManager<V>['use']>[0]
+>;
+export type AxiosRequestInterceptor = AxiosInterceptor<
+  AxiosRequestConfig & {
+    headers: AxiosRequestHeaders;
+  }
+>;
+export interface CreateAxiosInterceptor<V> {
+  (options?: AxiosCaseMiddlewareOptions): AxiosInterceptor<V>;
 }
-export interface CreateAxiosInterceptor {
-  (options?: AxiosCaseMiddlewareOptions): AxiosInterceptor;
+export interface CreateAxiosRequestInterceptor {
+  (options?: AxiosCaseMiddlewareOptions): AxiosRequestInterceptor;
 }
 export interface CreateAxiosRequestTransformer {
   (options?: AxiosCaseMiddlewareOptions): AxiosRequestTransformer;
@@ -89,7 +99,7 @@ export type ApplyCaseMiddlewareOptions = AxiosCaseMiddlewareOptions & {
   caseMiddleware?: {
     requestTransformer?: AxiosRequestTransformer;
     responseTransformer?: AxiosResponseTransformer;
-    requestInterceptor?: AxiosInterceptor;
+    requestInterceptor?: AxiosRequestInterceptor;
   };
 };
 export interface ApplyCaseMiddleware {
