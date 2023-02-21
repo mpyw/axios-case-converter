@@ -71,6 +71,6 @@
     "url-search-params-polyfill": "^8.1.1"
   },
   "peerDependencies": {
-    "axios": ">=0.23.0 <2.0.0"
+    "axios": ">=1.0.0 <2.0.0"
   }
 }
