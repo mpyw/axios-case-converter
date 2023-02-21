@@ -10,7 +10,6 @@ jobs:
       matrix:
         node: [18, 16]
         axios:
-          - '^0'
           - '^1'
 
     steps:

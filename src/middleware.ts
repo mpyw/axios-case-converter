@@ -3,18 +3,18 @@ import { isAxiosHeaders, isPlainObject } from './util';
 import {
   ApplyCaseMiddleware,
   AxiosCaseMiddlewareOptions,
-  CreateAxiosInterceptor,
+  CreateAxiosRequestInterceptor,
   CreateAxiosRequestTransformer,
   CreateAxiosResponseTransformer,
   ObjectTransformer,
   TransformableObject,
 } from './types';
 
-export const createSnakeParamsInterceptor: CreateAxiosInterceptor = (
+export const createSnakeParamsInterceptor: CreateAxiosRequestInterceptor = (
   options?
 ) => {
   const { snake } = createObjectTransformers(options?.caseFunctions);
-  return (config): ReturnType<ReturnType<CreateAxiosInterceptor>> => {
+  return (config): ReturnType<ReturnType<CreateAxiosRequestInterceptor>> => {
     if (config.params) {
       config.params = snake(config.params, options);
     }
