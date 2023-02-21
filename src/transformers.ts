@@ -105,7 +105,7 @@ const transformObjectUsingCallbackRecursive = (
     if (isFormData(store) || isURLSearchParams(store)) {
       store.append(fn(key as string), value as string & File);
     } else if (key !== '__proto__') {
-      store[typeof key === 'number' ? key : fn(`${key}`)] =
+      store[Array.isArray(data) ? Number(key) : fn(`${key}`)] =
         transformObjectUsingCallbackRecursive(value, fn, overwrite);
     }
   }
