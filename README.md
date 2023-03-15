@@ -86,6 +86,16 @@ const options = {
 };
 ```
 
+### `ignoreParams`: `boolean`
+
+Disable HTTP URL  parameters transformation.
+
+```js
+const options = {
+  ignoreParams: true
+};
+```
+
 ### `caseFunctions`: `{ snake?: Function, camel?: Function, header?: Function }`
 
 Override built-in `change-case` functions.

@@ -72,6 +72,7 @@ export type AxiosCaseMiddlewareOptions = Omit<
 > & {
   caseFunctions?: Partial<CaseFunctions>;
   ignoreHeaders?: boolean;
+  ignoreParams?: boolean;
 };
 export type AxiosInterceptor<V> = NonNullable<
   Parameters<AxiosInterceptorManager<V>['use']>[0]

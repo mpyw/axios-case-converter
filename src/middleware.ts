@@ -15,7 +15,7 @@ export const createSnakeParamsInterceptor: CreateAxiosRequestInterceptor = (
 ) => {
   const { snake } = createObjectTransformers(options?.caseFunctions);
   return (config): ReturnType<ReturnType<CreateAxiosRequestInterceptor>> => {
-    if (config.params) {
+    if (options?.ignoreParams !== true && config.params) {
       config.params = snake(config.params, options);
     }
     return config;
