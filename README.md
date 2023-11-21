@@ -144,54 +144,57 @@ const options = {
 
 ## Attention
 
-### `Object` compatibility
+> [!WARNING]
+> ### `Object` compatibility
+>
+> If you run on **Internet Explorer**, you need polyfill for `Object.prorotypte.entries()`.
+>
+> - [zloirock/core-js: Standard Library](https://github.com/zloirock/core-js)
 
-If you run on **Internet Explorer**, you need polyfill for `Object.prorotypte.entries()`.
+> [!WARNING]
+> ### `FormData` compatibility
+>
+> If you use `FormData` on **Internet Explorer**, you need polyfill of `FormData.prototype.entries()`.
+>
+> - [jimmywarting/FormData: HTML5 `FormData` polyfill for Browsers.](https://github.com/jimmywarting/FormData)
+>
+> If you use `FormData` on **React Native**, please ignore the following warnings after confirming that polyfill is **impossible**.
+>
+> ```js
+> // RN >= 0.52
+> import { YellowBox } from 'react-native';
+> YellowBox.ignoreWarnings([
+>   'Be careful that FormData cannot be transformed on React Native.'
+> ]);
+> 
+> // RN < 0.52
+> console.ignoredYellowBox = [
+>   'Be careful that FormData cannot be transformed on React Native.'
+> ];
+> ```
 
-- [zloirock/core-js: Standard Library](https://github.com/zloirock/core-js)
-
-### `FormData` compatibility
-
-If you use `FormData` on **Internet Explorer**, you need polyfill of `FormData.prototype.entries()`.
-
-- [jimmywarting/FormData: HTML5 `FormData` polyfill for Browsers.](https://github.com/jimmywarting/FormData)
-
-If you use `FormData` on **React Native**, please ignore the following warnings after confirming that polyfill is **impossible**.
-
-```js
-// RN >= 0.52
-import { YellowBox } from 'react-native';
-YellowBox.ignoreWarnings([
-  'Be careful that FormData cannot be transformed on React Native.'
-]);
-
-// RN < 0.52
-console.ignoredYellowBox = [
-  'Be careful that FormData cannot be transformed on React Native.'
-];
-```
-
-### `Symbol` compatibility
-
-If you use **React Native** for **Android** development, you should use **Symbol** polyfill from `core-js` to avoid bugs with iterators:
-
-1. Create `polyfill.js` in root directory with code:
-
-```js
-global.Symbol = require('core-js/es6/symbol');
-require('core-js/fn/symbol/iterator');
-```
-
-2. Include `polyfill.js` in entry point of your app (e.g. `app.js`):
-
-```js
-import { Platform } from 'react-native';
-
-// ...
-
-if (Platform.OS === 'android') {
-  require('./polyfill.js');
-}
-```
-
-cf. [undefined is not a function(evaluating '_iterator\[typeof Symbol === "function"?Symbol.iterator:"@@iterator"\]()') · Issue #15902 · facebook/react-native](https://github.com/facebook/react-native/issues/15902)
+> [!WARNING]
+> ### `Symbol` compatibility
+>
+> If you use **React Native** for **Android** development, you should use **Symbol** polyfill from `core-js` to avoid bugs with iterators:
+>
+> 1. Create `polyfill.js` in root directory with code:
+>
+> ```js
+> global.Symbol = require('core-js/es6/symbol');
+> require('core-js/fn/symbol/iterator');
+> ```
+>
+> 2. Include `polyfill.js` in entry point of your app (e.g. `app.js`):
+>
+> ```js
+> import { Platform } from 'react-native';
+>
+> // ...
+>
+> if (Platform.OS === 'android') {
+>   require('./polyfill.js');
+> }
+> ```
+>
+> cf. [undefined is not a function(evaluating '_iterator\[typeof Symbol === "function"?Symbol.iterator:"@@iterator"\]()') · Issue #15902 · facebook/react-native](https://github.com/facebook/react-native/issues/15902)
