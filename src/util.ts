@@ -1,4 +1,5 @@
 import { Transformable, TransformableObject } from './types';
+import { AxiosHeaders } from 'axios';
 
 export const isURLSearchParams = (value: unknown): value is URLSearchParams => {
   return (
@@ -27,15 +28,9 @@ export const isTransformable = (value: unknown): value is Transformable => {
   );
 };
 
-// Dirty hack for unexported AxiosHeaders.
-// Don't handle it as Transformable to reduce the scope of the impact.
 export const isAxiosHeaders = (value: unknown): value is AxiosHeaders => {
   if (value == null) {
     return false;
   }
-  return Object.getPrototypeOf(value)?.constructor?.name === 'AxiosHeaders';
+  return value instanceof AxiosHeaders;
 };
-interface AxiosHeaders {
-  set(headerName: string, value: string, rewrite: boolean): unknown;
-  delete(header: string): boolean;
-}
