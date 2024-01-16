@@ -14,6 +14,9 @@ const config = {
     indent: !isProd,
     exports: 'named',
     file: `dist/axios-case-converter.${isProd ? 'min.js' : 'js'}`,
+    globals: {
+      axios: 'axios',
+    },
   },
   plugins: [
     nodeResolve({
@@ -24,6 +27,7 @@ const config = {
     }),
     isProd && terser(),
   ],
+  external: ['axios'],
 };
 
 export default config;

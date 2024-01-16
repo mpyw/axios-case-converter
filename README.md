@@ -15,9 +15,17 @@ Axios transformer/interceptor that converts _snake_case/camelCase_
 
 ### NPM
 
-```
+```bash
 npm install axios-case-converter
 ```
+
+> [!IMPORTANT]
+>
+> Axios is a peer dependency of axios-case-converter and must be installed separately.
+>
+> ```bash
+> npm install axios
+> ```
 
 ### CDN
 
