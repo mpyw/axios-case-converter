@@ -9,6 +9,7 @@ import {
   ObjectTransformer,
   TransformableObject,
 } from './types';
+import { AxiosHeaderValue } from 'axios';
 
 export const createSnakeParamsInterceptor: CreateAxiosRequestInterceptor = (
   options?
@@ -74,7 +75,7 @@ const overwriteHeadersOrNoop = (
       headers.delete(key);
       headers.set(
         Object.keys(fn({ [key]: null }, options) as TransformableObject)[0],
-        value,
+        value as AxiosHeaderValue,
         true
       );
     } else {
