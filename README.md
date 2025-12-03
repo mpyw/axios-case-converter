@@ -155,7 +155,7 @@ const options = {
 > [!WARNING]
 > ### `Object` compatibility
 >
-> If you run on **Internet Explorer**, you need polyfill for `Object.prorotypte.entries()`.
+> If you run on **Internet Explorer**, you need polyfill for `Object.prototype.entries()`.
 >
 > - [zloirock/core-js: Standard Library](https://github.com/zloirock/core-js)
 
