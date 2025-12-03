@@ -33,7 +33,7 @@ npm install axios-case-converter
 <script src="https://unpkg.com/axios-case-converter@latest/dist/axios-case-converter.min.js"></script>
 ```
 
-It is strongly recommended that you replace `latest` with a fixed version.
+It is strongly recommended that you replace `latest` with a fixed version and use Subresource Integrity.
 
 ## Usage
 
