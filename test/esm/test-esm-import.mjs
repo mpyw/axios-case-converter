@@ -34,7 +34,9 @@ const mockAxios = {
 try {
   const result = applyCaseMiddleware(mockAxios);
   if (result !== mockAxios) {
-    console.error('FAIL: applyCaseMiddleware did not return the axios instance');
+    console.error(
+      'FAIL: applyCaseMiddleware did not return the axios instance'
+    );
     process.exit(1);
   }
   console.log('PASS: applyCaseMiddleware works correctly');
