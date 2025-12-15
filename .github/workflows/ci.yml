@@ -20,7 +20,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Install Packages
-        run: npm install
+        run: npm install --safe-chain
 
       - name: Install fixed axios
         run: npm install -D 'axios@${{ matrix.axios }}'
