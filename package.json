@@ -4,6 +4,18 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "typings/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./typings/index.d.ts",
+        "default": "./lib/index.mjs"
+      },
+      "require": {
+        "types": "./typings/index.d.ts",
+        "default": "./lib/index.js"
+      }
+    }
+  },
   "sideEffects": false,
   "scripts": {
     "check": "tsc --noEmit",
@@ -13,13 +25,15 @@
     "fix:eslint": "eslint {src,test}/**/*.ts *.config.js",
     "fix:prettier": "prettier ./src ./test *.config.js --write",
     "fix": "npm run fix:eslint && npm run fix:prettier",
-    "build:cjs": "tsc",
+    "build:cjs": "tsc && node scripts/generate-esm-wrapper.js",
     "build:es": "tsc -p tsconfig.es.json",
     "build:umd": "NODE_ENV=development rollup -c",
     "build:umd:min": "NODE_ENV=production rollup -c",
     "build:typings": "tsc -p tsconfig.typings.json",
     "build": "run-p build:**",
     "test": "jest",
+    "test:esm": "node test/esm/test-esm-import.mjs",
+    "test:all": "npm test && npm run test:esm",
     "test:coverage": "jest --coverage",
     "prepublishOnly": "git diff --no-ext-diff --quiet --exit-code src .gitignore package.json README.md LICENSE || (echo \"Please commit changes!\" && false) && npm test && rm -rf lib es dist typings && npm run build"
   },
