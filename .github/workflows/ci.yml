@@ -41,6 +41,12 @@ jobs:
       - name: Test
         run: npm run test:coverage
 
+      - name: Build
+        run: npm run build
+
+      - name: Test ESM Import
+        run: npm run test:esm
+
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@v2
         with:

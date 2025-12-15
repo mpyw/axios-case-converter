@@ -32,6 +32,8 @@
     "build:typings": "tsc -p tsconfig.typings.json",
     "build": "run-p build:**",
     "test": "jest",
+    "test:esm": "node test/esm/test-esm-import.mjs",
+    "test:all": "npm test && npm run test:esm",
     "test:coverage": "jest --coverage",
     "prepublishOnly": "git diff --no-ext-diff --quiet --exit-code src .gitignore package.json README.md LICENSE || (echo \"Please commit changes!\" && false) && npm test && rm -rf lib es dist typings && npm run build"
   },
