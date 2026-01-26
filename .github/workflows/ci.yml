@@ -20,7 +20,9 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Install safe-chain
-        run: curl -fsSL https://raw.githubusercontent.com/AikidoSec/safe-chain/main/install-scripts/install-safe-chain.sh | sh -s -- --ci
+        run: curl -fsSL https://raw.githubusercontent.com/AikidoSec/safe-chain/v1.4.2/install-scripts/install-safe-chain.sh | sh -s -- --ci
+        env:
+          SAFE_CHAIN_VERSION: 1.4.2
 
       - name: Install Packages
         run: npm install
