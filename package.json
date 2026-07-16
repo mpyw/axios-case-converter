@@ -71,7 +71,7 @@
     "@typescript-eslint/parser": "^5.0.0",
     "axios": "^1.1.2",
     "axios-mock-adapter": "^2.1.0",
-    "blob-polyfill": "^5.0.20210201",
+    "blob-polyfill": "^9.0.20240710",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^10.1.8",
     "formdata-polyfill": "^4.0.10",
