@@ -40,7 +40,7 @@
   "description": "Axios transformer/interceptor that converts snake_case/camelCase",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mpyw/axios-interceptor-change-case.git"
+    "url": "git+https://github.com/mpyw/axios-case-converter.git"
   },
   "keywords": [
     "axios",
@@ -53,9 +53,9 @@
   "author": "mpyw <ryosuke_i_628@yahoo.co.jp>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mpyw/axios-interceptor-change-case/issues"
+    "url": "https://github.com/mpyw/axios-case-converter/issues"
   },
-  "homepage": "https://github.com/mpyw/axios-interceptor-change-case#readme",
+  "homepage": "https://github.com/mpyw/axios-case-converter#readme",
   "dependencies": {
     "camel-case": "^4.1.1",
     "header-case": "^2.0.3",
