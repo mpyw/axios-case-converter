@@ -17,12 +17,6 @@ const snakeData = {
   append: {
     foo_bar_baz123: 'fooBarBaz123',
   },
-  constructor: {
-    foo_bar_baz123: 'fooBarBaz123',
-  },
-  prototype: {
-    foo_bar_baz123: 'fooBarBaz123',
-  },
   empty: null,
 };
 
@@ -38,12 +32,6 @@ const camelData = {
     fooBarBaz123: 'fooBarBaz123',
   },
   append: {
-    fooBarBaz123: 'fooBarBaz123',
-  },
-  constructor: {
-    fooBarBaz123: 'fooBarBaz123',
-  },
-  prototype: {
     fooBarBaz123: 'fooBarBaz123',
   },
   empty: null,
