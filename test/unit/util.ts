@@ -7,11 +7,15 @@ import {
   isURLSearchParams,
 } from '../../src/util';
 import { newAxiosHeadersFrom } from '../axios-headers-dirty-hacks';
+import { captureGlobal, restoreGlobals } from '../global-env';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 beforeEach(async () => {
+  captureGlobal('Blob');
+  captureGlobal('FormData');
+  captureGlobal('URLSearchParams');
   // @ts-ignore
   global.Blob = require('blob-polyfill').Blob;
   require('url-search-params-polyfill');
@@ -19,12 +23,7 @@ beforeEach(async () => {
 });
 
 afterEach(() => {
-  // @ts-ignore
-  delete global.Blob;
-  // @ts-ignore
-  delete global.FormData;
-  // @ts-ignore
-  delete global.URLSearchParams;
+  restoreGlobals();
   jest.resetModules();
 });
 

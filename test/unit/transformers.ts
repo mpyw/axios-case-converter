@@ -6,11 +6,15 @@ import {
 import { noCase } from 'no-case';
 import { snakeCase } from 'snake-case';
 import { camelCase } from 'camel-case';
+import { captureGlobal, restoreGlobals } from '../global-env';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 beforeEach(() => {
+  captureGlobal('Blob');
+  captureGlobal('FormData');
+  captureGlobal('URLSearchParams');
   // @ts-ignore
   global.Blob = require('blob-polyfill').Blob;
   require('url-search-params-polyfill');
@@ -18,12 +22,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  // @ts-ignore
-  delete global.Blob;
-  // @ts-ignore
-  delete global.FormData;
-  // @ts-ignore
-  delete global.URLSearchParams;
+  restoreGlobals();
   jest.resetModules();
 });
 
