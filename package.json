@@ -68,7 +68,7 @@
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.9",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
+    "@typescript-eslint/parser": "^8.63.0",
     "axios": "^1.1.2",
     "axios-mock-adapter": "^2.1.0",
     "blob-polyfill": "^9.0.20240710",
