@@ -58,7 +58,7 @@
   "homepage": "https://github.com/mpyw/axios-case-converter#readme",
   "dependencies": {
     "camel-case": "^4.1.1",
-    "header-case": "^2.0.3",
+    "header-case": "^3.0.0",
     "snake-case": "^3.0.3",
     "tslib": "^2.3.0"
   },
