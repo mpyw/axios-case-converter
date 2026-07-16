@@ -2,6 +2,7 @@
 
 import { noCase } from 'no-case';
 import { createObjectTransformer } from '../../src/transformers';
+import { captureGlobal, restoreGlobals } from '../global-env';
 
 let warn: Console['warn'];
 
@@ -9,6 +10,10 @@ let warn: Console['warn'];
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 beforeEach(() => {
+  captureGlobal('Blob');
+  captureGlobal('navigator');
+  captureGlobal('FormData');
+  captureGlobal('URLSearchParams');
   // @ts-ignore
   global.Blob = require('blob-polyfill').Blob;
   // @ts-ignore
@@ -20,14 +25,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  // @ts-ignore
-  delete global.Blob;
-  // @ts-ignore
-  delete global.navigator;
-  // @ts-ignore
-  delete global.FormData;
-  // @ts-ignore
-  delete global.URLSearchParams;
+  restoreGlobals();
   console.warn = warn;
   jest.resetModules();
 });

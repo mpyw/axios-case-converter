@@ -6,11 +6,15 @@ import {
 import { noCase } from 'no-case';
 import { snakeCase } from 'snake-case';
 import { camelCase } from 'camel-case';
+import { captureGlobal, restoreGlobals } from '../global-env';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 beforeEach(() => {
+  captureGlobal('Blob');
+  captureGlobal('FormData');
+  captureGlobal('URLSearchParams');
   // @ts-ignore
   global.Blob = require('blob-polyfill').Blob;
   require('url-search-params-polyfill');
@@ -18,12 +22,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  // @ts-ignore
-  delete global.Blob;
-  // @ts-ignore
-  delete global.FormData;
-  // @ts-ignore
-  delete global.URLSearchParams;
+  restoreGlobals();
   jest.resetModules();
 });
 
@@ -198,6 +197,27 @@ test('it should prevent prototype pollution attack', () => {
     '{"simpleKey":"valueOne","__proto__":{"attacked":true}}'
   );
   expect(JSON.stringify(after)).toBe('{"simple key":"valueOne"}');
+});
+
+test('it should preserve "constructor"/"prototype" as own data keys', () => {
+  // Note: axios itself strips these keys from HTTP request bodies as a
+  // prototype-pollution safeguard, so this behavior can only be verified at
+  // the transformer level rather than through a full axios round trip.
+  const before = {
+    constructor: { fooBarBaz123: 'fooBarBaz123' },
+    prototype: { fooBarBaz123: 'fooBarBaz123' },
+  };
+
+  const after = createObjectTransformer(snakeCase)(before) as Record<
+    string,
+    unknown
+  >;
+
+  expect(Object.prototype.hasOwnProperty.call(after, 'constructor')).toBe(true);
+  expect(Object.prototype.hasOwnProperty.call(after, 'prototype')).toBe(true);
+  expect(JSON.stringify(after)).toBe(
+    '{"constructor":{"foo_bar_baz123":"fooBarBaz123"},"prototype":{"foo_bar_baz123":"fooBarBaz123"}}'
+  );
 });
 
 test('it should replace built-in change-case functions', () => {
