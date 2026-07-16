@@ -10,6 +10,17 @@ updates:
       npm-minor:
         patterns: ["*"]
         update-types: ["minor", "patch"]
+    ignore:
+      # Freeze the change-case family at the current major line.
+      # The v5 line (header-case@3+, camel-case@5+, snake-case@4+, no-case@4+)
+      # is ESM-only and drops the `stripRegexp` option we rely on to preserve
+      # bracketed keys such as `user_profile[screen_name]`. See PR #76.
+      - dependency-name: "header-case"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "camel-case"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "snake-case"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
