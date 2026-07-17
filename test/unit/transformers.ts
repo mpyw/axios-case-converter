@@ -6,25 +6,9 @@ import {
 import { noCase } from 'no-case';
 import { snakeCase } from 'snake-case';
 import { camelCase } from 'camel-case';
-import { captureGlobal, restoreGlobals } from '../global-env';
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
-beforeEach(() => {
-  captureGlobal('Blob');
-  captureGlobal('FormData');
-  captureGlobal('URLSearchParams');
-  // @ts-ignore
-  global.Blob = require('blob-polyfill').Blob;
-  require('url-search-params-polyfill');
-  require('formdata-polyfill');
-});
-
-afterEach(() => {
-  restoreGlobals();
-  jest.resetModules();
-});
+// Node.js 18+ provides native FormData / URLSearchParams, so the transformer
+// tests exercise the real globals directly.
 
 test('it should recreate URLSearchParams', () => {
   const before = new URLSearchParams([
@@ -81,12 +65,11 @@ test('it should recreate FormData', () => {
   expect(JSON.stringify([...before.entries()])).toBe(
     '[["keyOne","valueOne"],["keyOne","valueOne"],["keyTwo","valueTwo"],["arrayList[arrayKey]","arrayItem"],["arrayList[arrayKey]","arrayItem"]]'
   );
-  /* eslint-disable @typescript-eslint/no-explicit-any */
+
   // @ts-ignore
   expect(JSON.stringify([...(after as any as FormData).entries()])).toBe(
     '[["key one","valueOne"],["key one","valueOne"],["key two","valueTwo"],["array list[array key]","arrayItem"],["array list[array key]","arrayItem"]]'
   );
-  /* eslint-enable @typescript-eslint/no-explicit-any */
 });
 
 test('it should overwrite FormData', () => {
@@ -104,12 +87,11 @@ test('it should overwrite FormData', () => {
   expect(JSON.stringify([...before.entries()])).toBe(
     '[["key one","valueOne"],["key one","valueOne"],["key two","valueTwo"],["array list[array key]","arrayItem"],["array list[array key]","arrayItem"]]'
   );
-  /* eslint-disable @typescript-eslint/no-explicit-any */
+
   // @ts-ignore
   expect(JSON.stringify([...(after as any as FormData).entries()])).toBe(
     '[["key one","valueOne"],["key one","valueOne"],["key two","valueTwo"],["array list[array key]","arrayItem"],["array list[array key]","arrayItem"]]'
   );
-  /* eslint-enable @typescript-eslint/no-explicit-any */
 });
 
 test('it should recursively recreate objects', () => {

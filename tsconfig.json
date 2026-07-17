@@ -1,28 +1,21 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "outDir": "lib",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "es2015.iterable"
-    ],
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
+    "target": "es2021",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["es2021", "dom", "dom.iterable"],
+    "types": ["node", "vitest/globals"],
+    "declaration": true,
+    "outDir": "dist",
     "esModuleInterop": true,
-    "importHelpers": true,
-    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": false,
     "strict": true,
-    "strictNullChecks": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "src/**/*.ts"
-  ]
+  "include": ["src", "test"]
 }

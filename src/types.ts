@@ -30,10 +30,7 @@ export interface TransformableObject {
   [key: string]: unknown;
 }
 export type Transformable = (
-  | unknown[]
-  | Record<string | number, unknown>
-  | FormData
-  | URLSearchParams
+  unknown[] | Record<string | number, unknown> | FormData | URLSearchParams
 ) &
   TransformableObject;
 

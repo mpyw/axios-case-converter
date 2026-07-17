@@ -51,7 +51,7 @@ const client = applyCaseMiddleware(
 );
 const mock = new MockAdapter(client);
 
-test('it should be converted on success', (done) => {
+test('it should be converted on success', async () => {
   mock.onPost('/success').reply((config) => {
     expect(config.method).toBe('post');
     expect(config.headers?.['X-Requested-With']).toBe('XMLHttpRequest');
@@ -69,32 +69,23 @@ test('it should be converted on success', (done) => {
       }),
     ];
   });
-  client
-    .post('/success', camelData, {
-      headers: {
-        xRequestedWith: 'XMLHttpRequest',
-        thisCamelShouldBePreserved: 'preserved',
-      },
-      params: {
-        userId: 1,
-        screenName: 'yay',
-        thisCamelShouldBePreserved: 'preserved',
-      },
-    })
-    .then((response) => {
-      expect(JSON.stringify(response.data)).toBe(JSON.stringify(camelData));
-      expect(response.headers.contentType).toBe('application/json');
-      expect(response.headers['THIS-HEADER-SHOULD-BE-PRESERVED']).toBe(
-        'preserved'
-      );
-      done();
-    })
-    .catch((error) => {
-      done(error);
-    });
+  const response = await client.post('/success', camelData, {
+    headers: {
+      xRequestedWith: 'XMLHttpRequest',
+      thisCamelShouldBePreserved: 'preserved',
+    },
+    params: {
+      userId: 1,
+      screenName: 'yay',
+      thisCamelShouldBePreserved: 'preserved',
+    },
+  });
+  expect(JSON.stringify(response.data)).toBe(JSON.stringify(camelData));
+  expect(response.headers.contentType).toBe('application/json');
+  expect(response.headers['THIS-HEADER-SHOULD-BE-PRESERVED']).toBe('preserved');
 });
 
-test('it should be converted on failure', (done) => {
+test('it should be converted on failure', async () => {
   mock.onPost('/failure').reply((config) => {
     expect(config.method).toBe('post');
     expect(config.headers?.['X-Requested-With']).toBe('XMLHttpRequest');
@@ -112,7 +103,7 @@ test('it should be converted on failure', (done) => {
       }),
     ];
   });
-  client
+  await client
     .post('/failure', camelData, {
       headers: {
         xRequestedWith: 'XMLHttpRequest',
@@ -126,7 +117,7 @@ test('it should be converted on failure', (done) => {
     })
     .then(
       () => {
-        done(new Error('Error has not been occurred.'));
+        throw new Error('Error has not been occurred.');
       },
       (error) => {
         expect(JSON.stringify(error.response.data)).toBe(
@@ -136,7 +127,6 @@ test('it should be converted on failure', (done) => {
         expect(error.response.headers['THIS-HEADER-SHOULD-BE-PRESERVED']).toBe(
           'preserved'
         );
-        done();
       }
     );
 });

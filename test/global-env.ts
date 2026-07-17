@@ -27,6 +27,19 @@ export const captureGlobal = (key: GlobalKey): void => {
   });
 };
 
+// Capture then override a global via `Object.defineProperty`. Plain assignment
+// (`globalThis.navigator = ...`) throws under strict ESM because some native
+// globals (e.g. `navigator`) are exposed as getter-only accessors, so we define
+// a fresh configurable/writable property instead. Pair with `restoreGlobals()`.
+export const setGlobal = (key: GlobalKey, value: unknown): void => {
+  captureGlobal(key);
+  Object.defineProperty(globalThis, key, {
+    value,
+    configurable: true,
+    writable: true,
+  });
+};
+
 // Restore every captured global to its original state. Non-configurable native
 // globals (Node.js >= 26) cannot be redefined or deleted; any polyfill
 // assignment against them was a no-op for the same reason, so tolerating the

@@ -94,15 +94,15 @@ export const applyCaseMiddleware: ApplyCaseMiddleware = (axios, options?) => {
     ...(Array.isArray(axios.defaults.transformRequest)
       ? axios.defaults.transformRequest
       : axios.defaults.transformRequest !== undefined
-      ? [axios.defaults.transformRequest]
-      : []),
+        ? [axios.defaults.transformRequest]
+        : []),
   ];
   axios.defaults.transformResponse = [
     ...(Array.isArray(axios.defaults.transformResponse)
       ? axios.defaults.transformResponse
       : axios.defaults.transformResponse !== undefined
-      ? [axios.defaults.transformResponse]
-      : []),
+        ? [axios.defaults.transformResponse]
+        : []),
     options?.caseMiddleware?.responseTransformer ||
       createCamelResponseTransformer(options),
   ];
