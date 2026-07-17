@@ -162,6 +162,13 @@ const options = {
 
 ## Attention
 
+> [!NOTE]
+>
+> Since **v2.0.0** the package ships an **ES2021 ESM** build. Legacy targets such
+> as Internet Explorer cannot execute it directly — you must transpile it (and
+> its dependencies) through your bundler first. The compatibility notes below
+> apply _after_ such transpilation.
+
 > [!WARNING]
 >
 > ### `Object` compatibility

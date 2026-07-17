@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [26, 24, 22]
+        node: [26, 24, 22, 20]
         axios:
           - '^1'
 
@@ -18,12 +18,13 @@ jobs:
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: ${{ matrix.node }}
+          cache: npm
 
       - name: Install safe-chain
         run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/download/1.5.13/install-safe-chain.sh | sh -s -- --ci
 
       - name: Install Packages
-        run: npm install
+        run: npm ci
 
       - name: Install fixed axios
         run: npm install -D 'axios@${{ matrix.axios }}'

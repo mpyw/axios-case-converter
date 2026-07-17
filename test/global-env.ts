@@ -58,3 +58,34 @@ export const restoreGlobals = (): void => {
     }
   }
 };
+
+interface MethodSnapshot {
+  target: object;
+  key: string;
+  descriptor?: PropertyDescriptor;
+}
+
+const methodSnapshots: MethodSnapshot[] = [];
+
+// Snapshot an own property (typically a prototype method) before a test deletes
+// or replaces it, so `restoreMethods()` can put it back unconditionally in
+// `afterEach` — even when an assertion throws mid-test and would otherwise leak
+// a mutilated native prototype into the following tests.
+export const captureMethod = (target: object, key: string): void => {
+  methodSnapshots.push({
+    target,
+    key,
+    descriptor: Object.getOwnPropertyDescriptor(target, key),
+  });
+};
+
+export const restoreMethods = (): void => {
+  while (methodSnapshots.length > 0) {
+    const { target, key, descriptor } = methodSnapshots.pop() as MethodSnapshot;
+    if (descriptor) {
+      Object.defineProperty(target, key, descriptor);
+    } else {
+      delete (target as Record<string, unknown>)[key];
+    }
+  }
+};

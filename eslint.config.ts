@@ -4,7 +4,10 @@ import prettier from 'eslint-config-prettier';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'coverage', 'node_modules'],
+    // Build outputs. `es/`, `lib/`, `typings/` are stale v1 artifacts that may
+    // still linger in a working tree; flat-config ESLint does not read
+    // .gitignore, so list them explicitly to avoid linting generated files.
+    ignores: ['dist', 'coverage', 'node_modules', 'es', 'lib', 'typings'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -14,9 +17,9 @@ export default tseslint.config(
       globals: {
         // Browser + Node globals used by src and tests.
         console: 'readonly',
-        navigator: 'writable',
+        navigator: 'readonly',
         globalThis: 'readonly',
-        global: 'writable',
+        global: 'readonly',
         process: 'readonly',
         URLSearchParams: 'readonly',
         FormData: 'readonly',

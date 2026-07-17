@@ -10,7 +10,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"
@@ -24,7 +25,8 @@
     "test:coverage": "vitest run --coverage",
     "test:esm": "node test/esm/test-esm-import.mjs",
     "test:all": "npm run test && npm run test:esm",
-    "prepublishOnly": "npm run check && npm run lint && npm run test && npm run build && npm run test:esm"
+    "prepack": "npm run build && npm run test:esm",
+    "prepublishOnly": "npm run check && npm run lint && npm run test"
   },
   "description": "Axios transformer/interceptor that converts snake_case/camelCase",
   "repository": {
@@ -46,7 +48,7 @@
   },
   "homepage": "https://github.com/mpyw/axios-case-converter#readme",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "camel-case": "^4.1.1",
