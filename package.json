@@ -61,6 +61,7 @@
     "axios-mock-adapter": "^2.1.0",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^10.1.8",
+    "jiti": "^2.7.0",
     "no-case": "^3.0.4",
     "prettier": "^3.3.0",
     "tsup": "^8.5.1",
