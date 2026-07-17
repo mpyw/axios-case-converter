@@ -31,15 +31,8 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      # Dirty hacks for https://github.com/mpyw/axios-case-converter/issues/47
-      - name: Disable dirty hacks for old version
-        if: ${{ matrix.axios == '^0' }}
-        run: |
-          cat <<EOD > test/axios-headers-dirty-hacks.ts
-          export function newAxiosHeadersFrom(thing?: Record<string, string | string[] | number | boolean | null>): Record<string, string | string[] | number | boolean | null> {
-            return thing ?? {}
-          }
-          EOD
+      - name: Type Check
+        run: npm run check
 
       - name: Test
         run: npm run test:coverage

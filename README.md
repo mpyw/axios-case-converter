@@ -27,13 +27,21 @@ npm install axios-case-converter
 > npm install axios
 > ```
 
+> [!NOTE]
+>
+> Since **v2.0.0** this package is **ESM-only** and requires **Node.js >= 18**.
+> Use `import` (no `require()`). If you still need CommonJS or older Node.js,
+> stay on the `1.x` line.
+
 ### CDN
 
 ```html
-<script src="https://unpkg.com/axios-case-converter@latest/dist/axios-case-converter.min.js"></script>
+<script type="module">
+  import applyCaseMiddleware from 'https://esm.sh/axios-case-converter';
+</script>
 ```
 
-It is strongly recommended that you replace `latest` with a fixed version and use Subresource Integrity.
+It is strongly recommended that you replace the unversioned URL with a fixed version.
 
 ## Usage
 
@@ -48,11 +56,11 @@ import axios from 'axios';
   const { data } = await client.post(
     'https://example.com/api/endpoint',
     {
-      targetId: 1
+      targetId: 1,
     },
     {
       params: { userId: 1 },
-      headers: { userAgent: 'Mozilla' }
+      headers: { userAgent: 'Mozilla' },
     }
   );
 
@@ -72,7 +80,7 @@ Disable transformation when the string matched or satisfied the condition.
 
 ```js
 const options = {
-  preservedKeys: ['preserve_this_key_1', 'preserve_this_key_2']
+  preservedKeys: ['preserve_this_key_1', 'preserve_this_key_2'],
 };
 ```
 
@@ -80,7 +88,7 @@ const options = {
 const options = {
   preservedKeys: (input) => {
     return ['preserve_this_key_1', 'preserve_this_key_2'].includes(input);
-  }
+  },
 };
 ```
 
@@ -90,17 +98,17 @@ Disable HTTP headers transformation.
 
 ```js
 const options = {
-  ignoreHeaders: true
+  ignoreHeaders: true,
 };
 ```
 
 ### `ignoreParams`: `boolean`
 
-Disable HTTP URL  parameters transformation.
+Disable HTTP URL parameters transformation.
 
 ```js
 const options = {
-  ignoreParams: true
+  ignoreParams: true,
 };
 ```
 
@@ -112,12 +120,14 @@ Override built-in `change-case` functions.
 const options = {
   caseFunctions: {
     camel: (input, options) => {
-      return (input.charAt(0).toLowerCase() + input.slice(1)).replace(/[-_](.)/g, (match, group1) => group1.toUpperCase());
-    }
-  }
+      return (input.charAt(0).toLowerCase() + input.slice(1)).replace(
+        /[-_](.)/g,
+        (match, group1) => group1.toUpperCase()
+      );
+    },
+  },
 };
 ```
-
 
 ### `caseOptions`: `{ stripRegexp?: RegExp }`
 
@@ -128,8 +138,8 @@ If you wish keeping original `change-case` behavior, override the options.
 ```js
 const options = {
   caseOptions: {
-    stripRegexp: /[^A-Z0-9]+/gi
-  }
+    stripRegexp: /[^A-Z0-9]+/gi,
+  },
 };
 ```
 
@@ -143,8 +153,8 @@ const options = {
     requestInterceptor: (config) => {
       // Disable query string transformation
       return config;
-    }
-  }
+    },
+  },
 };
 ```
 
@@ -153,6 +163,7 @@ const options = {
 ## Attention
 
 > [!WARNING]
+>
 > ### `Object` compatibility
 >
 > If you run on **Internet Explorer**, you need polyfill for `Object.prototype.entries()`.
@@ -160,6 +171,7 @@ const options = {
 > - [zloirock/core-js: Standard Library](https://github.com/zloirock/core-js)
 
 > [!WARNING]
+>
 > ### `FormData` compatibility
 >
 > If you use `FormData` on **Internet Explorer**, you need polyfill of `FormData.prototype.entries()`.
@@ -172,16 +184,17 @@ const options = {
 > // RN >= 0.52
 > import { YellowBox } from 'react-native';
 > YellowBox.ignoreWarnings([
->   'Be careful that FormData cannot be transformed on React Native.'
+>   'Be careful that FormData cannot be transformed on React Native.',
 > ]);
-> 
+>
 > // RN < 0.52
 > console.ignoredYellowBox = [
->   'Be careful that FormData cannot be transformed on React Native.'
+>   'Be careful that FormData cannot be transformed on React Native.',
 > ];
 > ```
 
 > [!WARNING]
+>
 > ### `Symbol` compatibility
 >
 > If you use **React Native** for **Android** development, you should use **Symbol** polyfill from `core-js` to avoid bugs with iterators:

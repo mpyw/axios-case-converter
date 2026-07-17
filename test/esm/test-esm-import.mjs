@@ -7,7 +7,7 @@
  * Run with: node test/esm/test-esm-import.mjs
  */
 
-import applyCaseMiddleware from '../../lib/index.mjs';
+import applyCaseMiddleware from '../../dist/index.js';
 
 // Test 1: Default export is a function
 if (typeof applyCaseMiddleware !== 'function') {

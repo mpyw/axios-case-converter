@@ -1,41 +1,30 @@
 {
   "name": "axios-case-converter",
-  "version": "1.1.2",
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "types": "typings/index.d.ts",
+  "version": "2.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": {
-        "types": "./typings/index.d.ts",
-        "default": "./lib/index.mjs"
-      },
-      "require": {
-        "types": "./typings/index.d.ts",
-        "default": "./lib/index.js"
-      }
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     }
   },
-  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "check": "tsc --noEmit",
-    "lint:eslint": "eslint {src,test}/**/*.ts *.config.js",
-    "lint:prettier": "prettier ./src ./test *.config.js --list-different",
-    "lint": "npm run lint:eslint && npm run lint:prettier",
-    "fix:eslint": "eslint {src,test}/**/*.ts *.config.js",
-    "fix:prettier": "prettier ./src ./test *.config.js --write",
-    "fix": "npm run fix:eslint && npm run fix:prettier",
-    "build:cjs": "tsc && node scripts/generate-esm-wrapper.js",
-    "build:es": "tsc -p tsconfig.es.json",
-    "build:umd": "NODE_ENV=development rollup -c",
-    "build:umd:min": "NODE_ENV=production rollup -c",
-    "build:typings": "tsc -p tsconfig.typings.json",
-    "build": "run-p build:**",
-    "test": "jest",
+    "lint": "eslint . && prettier --check \"**/*.{ts,js,mjs,json,md}\"",
+    "fix": "eslint . --fix && prettier --write \"**/*.{ts,js,mjs,json,md}\"",
+    "build": "tsup",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:esm": "node test/esm/test-esm-import.mjs",
-    "test:all": "npm test && npm run test:esm",
-    "test:coverage": "jest --coverage",
-    "prepublishOnly": "git diff --no-ext-diff --quiet --exit-code src .gitignore package.json README.md LICENSE || (echo \"Please commit changes!\" && false) && npm test && rm -rf lib es dist typings && npm run build"
+    "test:all": "npm run test && npm run test:esm",
+    "prepublishOnly": "npm run check && npm run lint && npm run test && npm run build && npm run test:esm"
   },
   "description": "Axios transformer/interceptor that converts snake_case/camelCase",
   "repository": {
@@ -56,33 +45,28 @@
     "url": "https://github.com/mpyw/axios-case-converter/issues"
   },
   "homepage": "https://github.com/mpyw/axios-case-converter#readme",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "camel-case": "^4.1.1",
     "header-case": "^2.0.3",
-    "snake-case": "^3.0.3",
-    "tslib": "^2.3.0"
+    "snake-case": "^3.0.3"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^13.0.5",
-    "@rollup/plugin-typescript": "^8.2.5",
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.10.9",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^26.1.1",
+    "@vitest/coverage-v8": "^4.1.10",
     "axios": "^1.1.2",
     "axios-mock-adapter": "^2.1.0",
-    "blob-polyfill": "^9.0.20240710",
-    "eslint": "^8.0.0",
+    "eslint": "^9.0.0",
     "eslint-config-prettier": "^10.1.8",
-    "formdata-polyfill": "^4.0.10",
-    "jest": "^27.2.5",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.4.1",
-    "rollup": "^2.58.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "ts-jest": "^27.0.5",
-    "typescript": "^4.9.5",
-    "url-search-params-polyfill": "^8.1.1"
+    "no-case": "^3.0.4",
+    "prettier": "^3.3.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.64.0",
+    "vitest": "^4.1.10"
   },
   "peerDependencies": {
     "axios": ">=1.0.0 <2.0.0"

@@ -7,25 +7,9 @@ import {
   isURLSearchParams,
 } from '../../src/util';
 import { newAxiosHeadersFrom } from '../axios-headers-dirty-hacks';
-import { captureGlobal, restoreGlobals } from '../global-env';
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
-beforeEach(async () => {
-  captureGlobal('Blob');
-  captureGlobal('FormData');
-  captureGlobal('URLSearchParams');
-  // @ts-ignore
-  global.Blob = require('blob-polyfill').Blob;
-  require('url-search-params-polyfill');
-  require('formdata-polyfill');
-});
-
-afterEach(() => {
-  restoreGlobals();
-  jest.resetModules();
-});
+// Node.js 18+ provides native FormData / URLSearchParams / Blob, so the tests
+// exercise the real globals instead of injecting polyfills.
 
 test('it should correctly handle URLSearchParams', () => {
   expect(isURLSearchParams(new URLSearchParams())).toBe(true);

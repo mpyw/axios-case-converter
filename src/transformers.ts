@@ -30,7 +30,6 @@ const transformObjectUsingCallbackRecursive = (
     return data;
   }
 
-  /* eslint-disable no-console */
   // Check FormData/URLSearchParams compatibility
   if (
     (isFormData(data) || isURLSearchParams(data)) &&
@@ -64,7 +63,6 @@ const transformObjectUsingCallbackRecursive = (
     }
     return data;
   }
-  /* eslint-enable no-console */
 
   const prototype = Object.getPrototypeOf(data);
 
@@ -73,13 +71,12 @@ const transformObjectUsingCallbackRecursive = (
   const store: Transformable = overwrite
     ? data
     : !prototype
-    ? Object.create(null)
-    : new prototype.constructor();
+      ? Object.create(null)
+      : new prototype.constructor();
 
   // We need to clean up all entries before overwriting.
   let series:
-    | Iterable<[unknown, unknown]>
-    | IterableIterator<[unknown, unknown]>;
+    Iterable<[unknown, unknown]> | IterableIterator<[unknown, unknown]>;
   if (isFormData(data) || isURLSearchParams(data)) {
     // Create native iterator from FormData/URLSearchParams
     series = data.entries();
