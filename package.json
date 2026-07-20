@@ -61,7 +61,7 @@
     "@vitest/coverage-v8": "^4.1.10",
     "axios": "^1.1.2",
     "axios-mock-adapter": "^2.1.0",
-    "eslint": "^9.0.0",
+    "eslint": "^10.7.0",
     "eslint-config-prettier": "^10.1.8",
     "jiti": "^2.7.0",
     "no-case": "^3.0.4",
