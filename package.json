@@ -64,7 +64,7 @@
     "eslint": "^10.7.0",
     "eslint-config-prettier": "^10.1.8",
     "jiti": "^2.7.0",
-    "no-case": "^3.0.4",
+    "no-case": "^4.0.0",
     "prettier": "^3.3.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.0",
