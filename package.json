@@ -18,9 +18,9 @@
   ],
   "scripts": {
     "check": "tsc --noEmit",
-    "lint": "eslint . && prettier --check \"**/*.{ts,js,mjs,json,md}\"",
-    "fix": "eslint . --fix && prettier --write \"**/*.{ts,js,mjs,json,md}\"",
-    "build": "tsup",
+    "lint": "oxlint . && prettier --check \"**/*.{ts,js,mjs,json,md}\"",
+    "fix": "oxlint . --fix && prettier --write \"**/*.{ts,js,mjs,json,md}\"",
+    "build": "tsup && tsc -p tsconfig.build.json",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:esm": "node test/esm/test-esm-import.mjs",
@@ -56,19 +56,15 @@
     "snake-case": "^3.0.3"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "@types/node": "^26.1.1",
     "@vitest/coverage-v8": "^4.1.10",
     "axios": "^1.1.2",
     "axios-mock-adapter": "^2.1.0",
-    "eslint": "^10.7.0",
-    "eslint-config-prettier": "^10.1.8",
-    "jiti": "^2.7.0",
     "no-case": "^3.0.4",
+    "oxlint": "^1.87.0",
     "prettier": "^3.3.0",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.0",
-    "typescript-eslint": "^8.64.0",
+    "typescript": "^7.0.2",
     "vitest": "^4.1.10"
   },
   "peerDependencies": {

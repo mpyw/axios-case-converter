@@ -1,4 +1,4 @@
-import { applyCaseMiddleware } from './middleware';
+import { applyCaseMiddleware } from './middleware.js';
 
 export default applyCaseMiddleware;
-export * from './types';
+export * from './types.js';

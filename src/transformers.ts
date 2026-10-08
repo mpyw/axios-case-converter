@@ -1,8 +1,8 @@
 import { camelCase as camelCaseString } from 'camel-case';
 import { snakeCase as snakeCaseString } from 'snake-case';
 import { headerCase as headerCaseString } from 'header-case';
-import { applyCaseOptions, preserveSpecificKeys } from './decorators';
-import { isFormData, isTransformable, isURLSearchParams } from './util';
+import { applyCaseOptions, preserveSpecificKeys } from './decorators.js';
+import { isFormData, isTransformable, isURLSearchParams } from './util.js';
 import {
   CaseFunction,
   CaseFunctions,
@@ -13,7 +13,7 @@ import {
   ObjectTransformerOptions,
   ObjectTransformers,
   Transformable,
-} from './types';
+} from './types.js';
 
 const caseFunctions: CaseFunctions = {
   snake: snakeCaseString,
