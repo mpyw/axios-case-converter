@@ -1,0 +1,34 @@
+name: npm check
+
+# Checks npm trusted publishing for this package, and publishes nothing. The
+# entry points call it when dispatched with check_only.
+#
+# npm matches the workflow the run started from, not this file. So this file
+# needs no trusted publisher of its own, and each entry point checks its own
+# registration.
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  npm-check:
+    runs-on: ubuntu-latest
+    # The trusted publishers name this environment, so the check uses it too.
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Read the package name
+        id: package
+        run: echo "name=$(jq -r .name package.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Check npm trusted publishing
+        uses: mpyw/npm-oidc-check-action@14e783b7a6c7678a725bf255cbbd4e1516b13fa3 # v1.0.0
+        with:
+          packages: ${{ steps.package.outputs.name }}

@@ -1,0 +1,47 @@
+name: Tag and Release
+
+# Show the target version in the run title, e.g. "Tag and Release v1.2.3".
+run-name: "${{ inputs.check_only && 'npm check via Tag and Release' || format('Tag and Release {0}', inputs.version) }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g., v1.2.3). Leave empty with check_only."
+        required: false
+        type: string
+      check_only:
+        description: "Only check npm trusted publishing. Tag, publish and release nothing."
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  # Passed down to the publish. A called workflow cannot ask for more than its
+  # caller was given.
+  id-token: write
+
+jobs:
+  # ===========================================================================
+  # check_only: check npm trusted publishing for this entry point, and stop
+  # ===========================================================================
+  npm-check:
+    if: inputs.check_only
+    uses: ./.github/workflows/npm-check.yml
+    permissions:
+      contents: read
+      id-token: write
+
+  # Skipping the tag skips the release too, since it needs the tag.
+  tag:
+    if: ${{ !inputs.check_only }}
+    uses: ./.github/workflows/tag.yml
+    with:
+      version: ${{ inputs.version }}
+
+  release:
+    needs: [tag]
+    uses: ./.github/workflows/release.yml
+    with:
+      version: ${{ inputs.version }}
+    secrets: inherit

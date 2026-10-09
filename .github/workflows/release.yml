@@ -1,32 +1,205 @@
-name: Node.js Package
+name: Release
 
+# Show the target version in the run title, e.g. "Release v1.2.3".
+run-name: "${{ inputs.check_only && 'npm check via Release' || format('Release {0}', inputs.version) }}"
+
+# Dispatched, not triggered by the release being created.
+#
+# npm is where the canonical artifact lands, and a published version can never
+# be published again. A GitHub Release freezes its tag, so creating one before
+# the publish succeeded would burn the version number on a run that failed
+# half way. The order here is publish, then release.
+#
+# npm trusted publishing (OIDC) matches the top-level workflow filename, not
+# this file when it is called. Both entry points therefore have a trusted
+# publisher on npmjs.com, each with the environment `release`:
+# tag_and_release.yml for the usual path, and release.yml for a retry
+# dispatched on its own. Dispatch either with check_only to check its
+# registration without a release.
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g., v1.2.3) - tag must already exist. Leave empty with check_only."
+        required: false
+        type: string
+      check_only:
+        description: "Only check npm trusted publishing. Publish and release nothing."
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      version:
+        description: "Version to release (e.g., v1.2.3) - tag must already exist"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  # ===========================================================================
+  # check_only: check npm trusted publishing for this entry point, and stop
+  # ===========================================================================
+  npm-check:
+    if: inputs.check_only
+    uses: ./.github/workflows/npm-check.yml
     permissions:
-      contents: write # for creating the tag and GitHub Release
+      contents: read
       id-token: write
+
+  # ===========================================================================
+  # Everything that can be checked without permission to publish. The publish
+  # job needs it, so skipping it with check_only skips the release too.
+  # ===========================================================================
+  plan:
+    if: ${{ !inputs.check_only }}
+    runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.plan.outputs.published }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Validate version format
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [[ ! "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: Invalid version format '$VERSION'"
+            echo "Expected format: vX.Y.Z (e.g., v1.2.3)"
+            exit 1
+          fi
+          echo "Version format valid: $VERSION"
+
+      - name: Check tag exists
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if ! git ls-remote --tags "https://github.com/${{ github.repository }}" \
+            | grep -q "refs/tags/${VERSION}$"; then
+            echo "Error: Tag '$VERSION' does not exist"
+            echo "Please create the tag first using the 'Tag' workflow"
+            exit 1
+          fi
+          echo "Tag exists: $VERSION"
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.version }}
+
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
           cache: npm
+
       - name: Install safe-chain
         run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/download/1.5.13/install-safe-chain.sh | sh -s -- --ci
+
       # Trusted publishing (OIDC) requires npm >= 11.5.1
       - run: npm install -g npm@latest
+
       - run: npm ci
-      # 1. Publish the canonical artifact first (prepublishOnly runs checks/tests)
-      - run: npm publish
-      # 2. Only after a successful publish, create the tag and GitHub Release
-      - name: Create tag and GitHub Release
+
+      # A version already on npm cannot be published again, and a run that
+      # stopped after publishing has to be finishable.
+      - name: Work out whether this is already published
+        id: plan
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          name=$(jq -r .name package.json)
+          have=$(jq -r .version package.json)
+          if [[ "v$have" != "$VERSION" ]]; then
+            echo "Error: package.json at $VERSION says $have"
+            exit 1
+          fi
+          if published=$(npm view "${name}@${have}" version 2>/dev/null) \
+            && [[ "$published" == "$have" ]]; then
+            echo "${name}@${have} is already on npm"
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "${name}@${have} is not published yet"
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # prepublishOnly and prepack run the checks, tests and build. A dry run
+      # of a published version fails, so it only runs before the first publish.
+      - name: Verify the package
+        if: steps.plan.outputs.published == 'false'
+        run: npm publish --dry-run
+
+  # ===========================================================================
+  # The publish, and then the release that freezes the tag.
+  # ===========================================================================
+  publish:
+    needs: [plan]
+    runs-on: ubuntu-latest
+
+    # The trusted publishers on npmjs.com name this environment. It has no
+    # reviewers.
+    environment: release
+
+    # Naming any permission replaces the whole default set, so both are here.
+    permissions:
+      # npm trusted publishing (OIDC) and provenance.
+      id-token: write
+      # `gh release create`.
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.version }}
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24.x'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+
+      - name: Install safe-chain
+        run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/download/1.5.13/install-safe-chain.sh | sh -s -- --ci
+
+      # Trusted publishing (OIDC) requires npm >= 11.5.1
+      - run: npm install -g npm@latest
+
+      - run: npm ci
+
+      - name: Read the package name
+        id: package
+        run: echo "name=$(jq -r .name package.json)" >> "$GITHUB_OUTPUT"
+
+      # Run even when there is nothing left to publish. It shows the trusted
+      # publisher still matches this workflow, and it publishes nothing.
+      - name: Check npm trusted publishing
+        uses: mpyw/npm-oidc-check-action@14e783b7a6c7678a725bf255cbbd4e1516b13fa3 # v1.0.0
+        with:
+          packages: ${{ steps.package.outputs.name }}
+
+      # prepublishOnly runs the checks and tests again before the publish.
+      - name: Publish to npm
+        if: needs.plan.outputs.published == 'false'
+        run: npm publish
+
+      - name: Already published
+        if: needs.plan.outputs.published == 'true'
+        run: echo "This version is already on npm"
+
+      # Last, because it freezes the tag. A release that is already there
+      # belongs to the run that got this far before, and is left alone.
+      - name: Create the release
         env:
           GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+          REPO: ${{ github.repository }}
         run: |
-          VERSION="v$(node -p "require('./package.json').version")"
-          gh release create "$VERSION" --target "$GITHUB_SHA" --generate-notes
+          if gh release view "$VERSION" --repo "$REPO" >/dev/null 2>&1; then
+            echo "Release '$VERSION' already exists"
+            exit 0
+          fi
+          gh release create "$VERSION" --repo "$REPO" --verify-tag --title "$VERSION" --generate-notes

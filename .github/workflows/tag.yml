@@ -1,0 +1,83 @@
+name: Tag
+
+# Show the target version in the run title, e.g. "Tag v1.2.3".
+run-name: "Tag ${{ inputs.version }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to tag (e.g., v1.2.3)"
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      version:
+        description: "Version to tag (e.g., v1.2.3)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate version format
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [[ ! "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: Invalid version format '$VERSION'"
+            echo "Expected format: vX.Y.Z (e.g., v1.2.3)"
+            exit 1
+          fi
+          echo "Version format valid: $VERSION"
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      # npm publish reads package.json, so the tag has to say the same thing.
+      - name: Check package.json says this version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          have="v$(jq -r .version package.json)"
+          if [[ "$have" != "$VERSION" ]]; then
+            echo "Error: package.json says $have, and this run is for $VERSION"
+            exit 1
+          fi
+          echo "package.json says $VERSION"
+
+      # A retry of one version has to be able to reach this twice. A tag that
+      # is already on the commit being tagged is left alone. One pointing
+      # somewhere else is a different release wearing this name, and is refused.
+      #
+      # The tag is pushed before the publish. Until the GitHub Release exists,
+      # Immutable Releases do not freeze it, so it can still be deleted.
+      - name: Create and push the tag
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          here=$(git rev-parse HEAD)
+          there=$(git ls-remote --tags origin "refs/tags/$VERSION" | cut -f1)
+          if [[ -n "$there" ]]; then
+            if [[ "$there" == "$here" ]]; then
+              echo "Tag '$VERSION' is already on $here"
+              exit 0
+            fi
+            echo "Error: tag '$VERSION' is on $there, and this run is on $here"
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$VERSION"
+          git push origin "$VERSION"
+          echo "Tag '$VERSION' created and pushed successfully"
