@@ -3,7 +3,7 @@ import {
   CaseFunction,
   PreservedKeysCondition,
   PreserveSpecificKeys,
-} from './types';
+} from './types.js';
 
 export const applyCaseOptions: ApplyCaseOptions = (fn, defaultOptions) => {
   return (input, options?): ReturnType<ReturnType<ApplyCaseOptions>> => {

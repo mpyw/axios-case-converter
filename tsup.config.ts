@@ -4,7 +4,8 @@ export default defineConfig({
   entry: ['src/index.ts'],
   format: ['esm'],
   target: 'es2021',
-  dts: true,
+  // Type declarations are emitted by `tsc -p tsconfig.build.json`.
+  dts: false,
   sourcemap: true,
   clean: true,
   treeshake: true,

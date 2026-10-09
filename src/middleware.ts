@@ -1,5 +1,5 @@
-import { createObjectTransformers } from './transformers';
-import { isAxiosHeaders, isPlainObject } from './util';
+import { createObjectTransformers } from './transformers.js';
+import { isAxiosHeaders, isPlainObject } from './util.js';
 import {
   ApplyCaseMiddleware,
   AxiosCaseMiddlewareOptions,
@@ -8,7 +8,7 @@ import {
   CreateAxiosResponseTransformer,
   ObjectTransformer,
   TransformableObject,
-} from './types';
+} from './types.js';
 import { AxiosHeaderValue } from 'axios';
 
 export const createSnakeParamsInterceptor: CreateAxiosRequestInterceptor = (

@@ -1,4 +1,4 @@
-import { Transformable, TransformableObject } from './types';
+import { Transformable, TransformableObject } from './types.js';
 import { AxiosHeaders } from 'axios';
 
 export const isURLSearchParams = (value: unknown): value is URLSearchParams => {
